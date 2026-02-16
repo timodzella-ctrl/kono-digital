@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kono Digital — Digital Solutions</title>
+  <title>Kono Digital — Online Courses</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <div class="container header-inner">
       <div class="brand">Kono Digital</div>
       <nav class="nav">
-        <a href="#services">Services</a>
+        <a href="#courses">Courses</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -21,28 +21,63 @@
   <main>
     <section class="hero">
       <div class="container hero-inner">
-        <h1>We create intuitive digital products</h1>
-        <p class="lead">Design, development, and marketing — everything to help your project grow.</p>
-        <a class="btn" href="#contact">Get in touch</a>
+        <h1>Learn Digital Skills Online</h1>
+        <p class="lead">Master design, development, and marketing. Start your journey today.</p>
       </div>
     </section>
 
-    <section id="services" class="section">
+    <section id="courses" class="section">
       <div class="container">
-        <h2 class="section-title">Services</h2>
-        <div class="cards">
-          <article class="card">
-            <h3>Design</h3>
-            <p>UI/UX, brand guidelines, and prototypes that work.</p>
-          </article>
-          <article class="card">
-            <h3>Development</h3>
-            <p>Modern front-end and back-end solutions with a focus on quality.</p>
-          </article>
-          <article class="card">
-            <h3>Marketing</h3>
-            <p>Growing traffic and conversions through measurable campaigns.</p>
-          </article>
+        <h2 class="section-title">Our Courses</h2>
+        <div class="pricing-grid">
+          <!-- Course 1 -->
+          <div class="course-card">
+            <h3>Digital Basics</h3>
+            <div class="price">€250</div>
+            <ul class="features">
+              <li>Fundamentals of web design (HTML/CSS)</li>
+              <li>5 video lessons</li>
+              <li>3 practical projects</li>
+              <li>6 months access</li>
+              <li>Email support</li>
+            </ul>
+            <button class="btn btn-primary" onclick="selectCourse('Digital Basics', 250)">Buy Now</button>
+          </div>
+
+          <!-- Course 2 -->
+          <div class="course-card featured">
+            <div class="badge">Most Popular</div>
+            <h3>Full Stack Developer</h3>
+            <div class="price">€300</div>
+            <ul class="features">
+              <li>Everything in Digital Basics +</li>
+              <li>JavaScript & React basics</li>
+              <li>Backend with Node.js</li>
+              <li>8 video lessons</li>
+              <li>5 practical projects</li>
+              <li>1 year access</li>
+              <li>Priority email support</li>
+            </ul>
+            <button class="btn btn-primary" onclick="selectCourse('Full Stack Developer', 300)">Buy Now</button>
+          </div>
+
+          <!-- Course 3 -->
+          <div class="course-card">
+            <h3>Pro Bundle</h3>
+            <div class="price">€350</div>
+            <ul class="features">
+              <li>ALL courses included</li>
+              <li>Advanced UI/UX Design</li>
+              <li>Mobile Development (React Native)</li>
+              <li>20+ video lessons</li>
+              <li>12 practical projects</li>
+              <li>Lifetime access</li>
+              <li>1-on-1 consultation (2 hours)</li>
+              <li>Private Discord community</li>
+              <li>Certificate of completion</li>
+            </ul>
+            <button class="btn btn-primary" onclick="selectCourse('Pro Bundle', 350)">Buy Now</button>
+          </div>
         </div>
       </div>
     </section>
@@ -50,32 +85,84 @@
     <section id="about" class="section alt">
       <div class="container">
         <h2 class="section-title">About Kono Digital</h2>
-        <p>We're a team of developers and designers helping startups and businesses reach new heights in the digital space.</p>
+        <p>We provide high-quality online courses designed to help you master modern digital skills. Learn from industry experts and get lifetime access to all course materials.</p>
       </div>
     </section>
 
     <section id="contact" class="section">
       <div class="container">
-        <h2 class="section-title">Get in Touch</h2>
-        <form id="contactForm" class="contact-form">
-          <label>
-            Name
-            <input type="text" name="name" required>
-          </label>
-          <label>
-            Email
-            <input type="email" name="email" required>
-          </label>
-          <label>
-            Message
-            <textarea name="message" rows="5" required></textarea>
-          </label>
-          <button type="submit" class="btn">Send</button>
-          <p id="formMessage" class="form-message" aria-live="polite"></p>
-        </form>
+        <h2 class="section-title">Questions?</h2>
+        <p>Email us at: <strong>hello@konodigital.com</strong></p>
       </div>
     </section>
   </main>
+
+  <!-- Modal for payment -->
+  <div id="paymentModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 id="courseTitle">Select Course</h2>
+      <p id="coursePrice">Price: €0</p>
+      
+      <div class="checkbox-container">
+        <input type="checkbox" id="agreeTerms" />
+        <label for="agreeTerms">
+          I have read and agree to the <a href="#" onclick="openTerms(); return false;">Terms and Conditions</a> 
+          and <a href="#" onclick="openPrivacy(); return false;">Privacy Policy</a>
+        </label>
+      </div>
+
+      <button class="btn btn-primary" id="paypalBtn" onclick="proceedToPayPal()" disabled>Proceed to PayPal</button>
+    </div>
+  </div>
+
+  <!-- Terms & Conditions Modal -->
+  <div id="termsModal" class="modal">
+    <div class="modal-content term-modal">
+      <span class="close" onclick="closeTerms()">&times;</span>
+      <h2>Terms and Conditions</h2>
+      <div class="modal-body">
+        <p><strong>1. Course Access</strong></p>
+        <p>After payment, you will receive instant access to digital course materials via email.</p>
+        
+        <p><strong>2. Refund Policy</strong></p>
+        <p>Refunds are available within 14 days of purchase if you haven't accessed the course materials.</p>
+        
+        <p><strong>3. Intellectual Property</strong></p>
+        <p>All course materials are licensed for personal use only. Redistribution is strictly prohibited.</p>
+        
+        <p><strong>4. User Responsibilities</strong></p>
+        <p>You are responsible for maintaining the confidentiality of your account credentials.</p>
+        
+        <p><strong>5. Limitation of Liability</strong></p>
+        <p>Kono Digital is not liable for any indirect damages or lost profits resulting from course usage.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Policy Modal -->
+  <div id="privacyModal" class="modal">
+    <div class="modal-content term-modal">
+      <span class="close" onclick="closePrivacy()">&times;</span>
+      <h2>Privacy Policy</h2>
+      <div class="modal-body">
+        <p><strong>1. Data Collection</strong></p>
+        <p>We collect name, email, and payment information for course delivery and communication purposes.</p>
+        
+        <p><strong>2. Data Usage</strong></p>
+        <p>Your data is used solely to provide course access and send course-related updates.</p>
+        
+        <p><strong>3. Data Security</strong></p>
+        <p>All sensitive data is encrypted and processed securely via PayPal.</p>
+        
+        <p><strong>4. Third-Party Services</strong></p>
+        <p>We use PayPal for secure payment processing. PayPal has its own privacy policy.</p>
+        
+        <p><strong>5. Your Rights</strong></p>
+        <p>You can request data deletion at any time by contacting hello@konodigital.com</p>
+      </div>
+    </div>
+  </div>
 
   <footer class="site-footer">
     <div class="container">
