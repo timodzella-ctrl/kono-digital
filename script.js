@@ -15,7 +15,7 @@ if(form){
   form.addEventListener('submit', e=>{
     e.preventDefault();
     const msg=document.getElementById('formMessage');
-    msg.textContent='Спасибо! Мы получили ваше сообщение и свяжемся в ближайшее время.';
+    msg.textContent='Thank you! We received your message and will get back to you soon.';
     form.reset();
   });
 }
