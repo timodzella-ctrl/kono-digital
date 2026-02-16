@@ -3,71 +3,238 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kono Admin Panel</title>
+  <title>Kono Admin Dashboard</title>
   <link rel="stylesheet" href="styles.css">
   <style>
     /* Специфичные стили для админки */
-    .admin-container { max-width: 800px; margin: 50px auto; padding: 20px; }
-    .login-wrapper { text-align: center; margin-top: 100px; }
-    .admin-content { display: none; } /* Скрыто по умолчанию */
+    body { background: #0f1724; color: #f8fafc; }
+    .admin-container { max-width: 1000px; margin: 0 auto; padding: 20px; }
     
-    input[type="password"] {
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #333;
-      background: #0b1624;
-      color: white;
-      font-size: 1rem;
+    /* Экран входа */
+    .login-wrapper { 
+      height: 100vh; display: flex; flex-direction: column; 
+      justify-content: center; align-items: center; text-align: center; 
+    }
+    .login-box { 
+      background: #1e293b; padding: 40px; border-radius: 16px; 
+      border: 1px solid #334155; width: 100%; max-width: 400px; 
     }
     
-    iframe { border: none; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+    /* Панель управления */
+    .dashboard { display: none; } /* Скрыто до входа */
+    
+    .stats-grid { 
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+      gap: 20px; margin-bottom: 30px; 
+    }
+    .stat-card { 
+      background: #1e293b; padding: 20px; border-radius: 12px; 
+      border: 1px solid #334155; text-align: center; 
+    }
+    .stat-number { font-size: 2rem; font-weight: bold; color: #5eead4; margin-top: 10px; }
+    .stat-label { color: #9aa4b2; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Форма добавления */
+    .add-form { 
+      background: #1e293b; padding: 25px; border-radius: 16px; 
+      border: 1px solid #334155; margin-bottom: 30px; 
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+      gap: 15px; align-items: end;
+    }
+    
+    input, select { 
+      width: 100%; padding: 12px; background: #0f1724; border: 1px solid #334155; 
+      color: white; border-radius: 8px; outline: none; 
+    }
+    input:focus { border-color: #5eead4; }
+
+    /* Таблица */
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th { text-align: left; padding: 15px; color: #9aa4b2; border-bottom: 1px solid #334155; }
+    td { padding: 15px; border-bottom: 1px solid #1e293b; color: #e2e8f0; }
+    tr:hover { background: rgba(255,255,255,0.02); }
+    
+    .status-paid { color: #5eead4; font-weight: bold; }
+    .btn-delete { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+    .btn-delete:hover { background: #dc2626; }
+
   </style>
 </head>
 <body>
 
-  <div id="loginScreen" class="container login-wrapper">
-    <h1>Admin Access</h1>
-    <p class="lead">Enter security key to access CRM</p>
-    <input type="password" id="adminPass" placeholder="Enter Password">
-    <button class="btn btn-primary" onclick="checkPass()" style="width: auto; margin-top: 10px;">Login</button>
-    <p id="errorMsg" style="color: #e74c3c; margin-top: 10px; display: none;">Access Denied</p>
-  </div>
-
-  <div id="adminPanel" class="container admin-content">
-    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-      <div class="brand">Kono CRM</div>
-      <a href="index.html" class="btn" style="width: auto; background: #333; color: #fff;">Back to Site</a>
-    </header>
-
-    <div class="course-card" style="width: 100%;">
-      <h3>Manual Transaction Entry</h3>
-      <p style="color: #9aa4b2; margin-bottom: 20px;">Use this form to log PayPal transactions manually.</p>
-      
-      <div style="text-align: center; color: red;">
-         ЗДЕСЬ ДОЛЖЕН БЫТЬ ТВОЙ IFRAME ИЗ GOOGLE FORMS
-      </div>
-      </div>
-    
-    <div style="margin-top: 30px; text-align: center;">
-      <p>Data is saved securely to Google Sheets.</p>
-      <a href="https://docs.google.com/spreadsheets" target="_blank" style="color: var(--accent);">Open Spreadsheet Database &rarr;</a>
+  <div id="loginScreen" class="login-wrapper">
+    <div class="login-box">
+      <h2 style="margin-top: 0;">Admin Access</h2>
+      <p style="color: #9aa4b2; margin-bottom: 20px;">Local Database Access</p>
+      <input type="password" id="adminPass" placeholder="Enter Password" style="margin-bottom: 15px;">
+      <button class="btn btn-primary" onclick="login()">Unlock Dashboard</button>
+      <p id="loginError" style="color: #ef4444; margin-top: 10px; display: none;">Wrong password!</p>
     </div>
   </div>
 
+  <div id="dashboard" class="admin-container dashboard">
+    
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+      <div>
+        <h1 style="margin: 0;">Sales Dashboard</h1>
+        <p style="color: #9aa4b2; margin: 5px 0 0;">Managing local sales records</p>
+      </div>
+      <button onclick="logout()" class="btn" style="width: auto; background: #334155;">Logout</button>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Revenue</div>
+        <div class="stat-number" id="totalRevenue">€0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Sales</div>
+        <div class="stat-number" id="totalSales">0</div>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom: 15px;">Add New Sale</h3>
+    <div class="add-form">
+      <div>
+        <label style="color: #9aa4b2; font-size: 0.8rem;">Date</label>
+        <input type="date" id="dateInput">
+      </div>
+      <div>
+        <label style="color: #9aa4b2; font-size: 0.8rem;">Client Email</label>
+        <input type="email" id="emailInput" placeholder="client@email.com">
+      </div>
+      <div>
+        <label style="color: #9aa4b2; font-size: 0.8rem;">Product</label>
+        <select id="productInput">
+          <option value="Digital Basics">Digital Basics (€250)</option>
+          <option value="Full Stack Dev">Full Stack Dev (€300)</option>
+          <option value="Pro Bundle">Pro Bundle (€350)</option>
+        </select>
+      </div>
+      <div>
+        <label style="color: #9aa4b2; font-size: 0.8rem;">Price (€)</label>
+        <input type="number" id="priceInput" value="250">
+      </div>
+      <button class="btn btn-primary" onclick="addSale()">+ Add Record</button>
+    </div>
+
+    <h3 style="margin-bottom: 15px;">Recent Transactions</h3>
+    <div class="table-container">
+      <table id="salesTable">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Email</th>
+            <th>Product</th>
+            <th>Amount</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          </tbody>
+      </table>
+    </div>
+
+  </div>
+
   <script>
-    function checkPass() {
-      const pass = document.getElementById('adminPass').value;
-      // Простой пароль. Можешь поменять 'admin123' на свой.
-      // ПРЕДУПРЕЖДЕНИЕ: Это защита от дурака, а не от хакера. 
-      // На GitHub код виден всем. Но для личного пользования пойдет.
-      if (pass === 'admin123') {
+    // --- КОНФИГУРАЦИЯ ---
+    const PASSWORD = "admin"; // Твой пароль
+    
+    // --- ЛОГИКА ---
+    let salesData = JSON.parse(localStorage.getItem('konoSales')) || [];
+
+    // При загрузке страницы устанавливаем дату сегодня
+    document.getElementById('dateInput').valueAsDate = new Date();
+
+    // Автоматическая смена цены при выборе курса
+    document.getElementById('productInput').addEventListener('change', function() {
+      if(this.value === "Digital Basics") document.getElementById('priceInput').value = 250;
+      if(this.value === "Full Stack Dev") document.getElementById('priceInput').value = 300;
+      if(this.value === "Pro Bundle") document.getElementById('priceInput').value = 350;
+    });
+
+    function login() {
+      const input = document.getElementById('adminPass').value;
+      if (input === PASSWORD) {
         document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('adminPanel').style.display = 'block';
+        document.getElementById('dashboard').style.display = 'block';
+        renderTable();
       } else {
-        document.getElementById('errorMsg').style.display = 'block';
+        document.getElementById('loginError').style.display = 'block';
       }
     }
-  </script>
 
+    function logout() {
+      location.reload();
+    }
+
+    function addSale() {
+      const date = document.getElementById('dateInput').value;
+      const email = document.getElementById('emailInput').value;
+      const product = document.getElementById('productInput').value;
+      const price = parseFloat(document.getElementById('priceInput').value);
+
+      if (!email || !price) {
+        alert("Please fill in email and price");
+        return;
+      }
+
+      const newSale = {
+        id: Date.now(), // Уникальный ID
+        date,
+        email,
+        product,
+        price
+      };
+
+      salesData.push(newSale);
+      saveData();
+      renderTable();
+      
+      // Очистка поля email
+      document.getElementById('emailInput').value = "";
+    }
+
+    function deleteSale(id) {
+      if(confirm("Are you sure you want to delete this record?")) {
+        salesData = salesData.filter(sale => sale.id !== id);
+        saveData();
+        renderTable();
+      }
+    }
+
+    function saveData() {
+      localStorage.setItem('konoSales', JSON.stringify(salesData));
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = "";
+      
+      let totalRev = 0;
+
+      // Сортировка: новые сверху
+      salesData.sort((a, b) => b.id - a.id).forEach(sale => {
+        totalRev += sale.price;
+        
+        const row = `
+          <tr>
+            <td>${sale.date}</td>
+            <td>${sale.email}</td>
+            <td>${sale.product}</td>
+            <td class="status-paid">€${sale.price}</td>
+            <td><button class="btn-delete" onclick="deleteSale(${sale.id})">Del</button></td>
+          </tr>
+        `;
+        tbody.innerHTML += row;
+      });
+
+      // Обновление статистики
+      document.getElementById('totalRevenue').innerText = `€${totalRev}`;
+      document.getElementById('totalSales').innerText = salesData.length;
+    }
+  </script>
 </body>
 </html>
