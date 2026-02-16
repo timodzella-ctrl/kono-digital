@@ -1,50 +1,187 @@
-:root{
-  --bg:#0f1724;
-  --card:#0b1624;
-  --muted:#9aa4b2;
-  --accent:#5eead4;
-  --accent-2:#60a5fa;
-  --white:#f8fafc;
-  --max-width:1100px;
+:root {
+  --bg: #0f1724;
+  --card: #0b1624;
+  --muted: #9aa4b2;
+  --accent: #5eead4;
+  --accent-2: #60a5fa;
+  --white: #f8fafc;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --warning-text: #fcd34d;
+  --info-bg: rgba(59, 130, 246, 0.1);
+  --info-border: #3b82f6;
+  --max-width: 1100px;
 }
-*{box-sizing:border-box}
-body{font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;margin:0;color:var(--white);background:linear-gradient(180deg,#071025 0%, #071527 60%);-webkit-font-smoothing:antialiased}
-.container{max-width:var(--max-width);margin:0 auto;padding:0 20px}
-.site-header{backdrop-filter:saturate(140%) blur(6px);position:sticky;top:0;background:rgba(7,13,26,0.4);border-bottom:1px solid rgba(255,255,255,0.03)}
-.header-inner{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
-.brand{font-weight:700;font-size:1.05rem}
-.nav a{color:var(--muted);margin-left:18px;text-decoration:none}
-.hero{padding:90px 0 80px;background:linear-gradient(90deg, rgba(6,11,26,0.6), rgba(6,11,26,0.1));}
-.hero-inner{display:flex;flex-direction:column;gap:18px}
-.hero h1{font-size:2.25rem;line-height:1.05;margin:0}
-.lead{color:var(--muted);max-width:700px}
-.btn{display:inline-block;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#022;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:600;border:none;cursor:pointer;transition:opacity 0.3s}
-.btn:hover{opacity:0.9}
-.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
-.btn:disabled{opacity:0.5;cursor:not-allowed}
-.section{padding:60px 0}
-.section.alt{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent)}
-.section-title{margin:0 0 40px;font-size:1.5rem;text-align:center}
-.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:30px;margin-top:40px}
-.course-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:40px 30px;border-radius:16px;border:1px solid rgba(255,255,255,0.06);position:relative;display:flex;flex-direction:column}
-.course-card.featured{border:2px solid var(--accent);transform:scale(1.05)}
-.course-card h3{margin:0 0 15px;font-size:1.4rem}
-.price{font-size:2.5rem;font-weight:700;color:var(--accent);margin:20px 0}
-.features{list-style:none;padding:0;margin:30px 0;flex-grow:1}
-.features li{padding:8px 0;color:var(--muted);border-bottom:1px solid rgba(255,255,255,0.03)}
-.features li:last-child{border-bottom:none}
-.badge{position:absolute;top:20px;right:20px;background:var(--accent);color:#022;padding:6px 12px;border-radius:20px;font-size:0.85rem;font-weight:600}
-.modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.8)}
-.modal.show{display:flex;align-items:center;justify-content:center}
-.modal-content{background:var(--card);padding:40px;border-radius:16px;border:1px solid rgba(255,255,255,0.1);max-width:500px;width:90%;position:relative}
-.term-modal{max-width:700px;max-height:70vh;overflow-y:auto}
-.modal-body{max-height:400px;overflow-y:auto;margin:20px 0}
-.close{position:absolute;top:15px;right:20px;font-size:28px;font-weight:bold;cursor:pointer;color:var(--muted)}
-.close:hover{color:var(--white)}
-.checkbox-container{display:flex;align-items:flex-start;gap:12px;margin:20px 0}
-.checkbox-container input[type="checkbox"]{margin-top:4px;cursor:pointer}
-.checkbox-container label{cursor:pointer;color:var(--muted);font-size:0.95rem}
-.checkbox-container a{color:var(--accent);text-decoration:none}
-.checkbox-container a:hover{text-decoration:underline}
-.site-footer{padding:30px 0;color:var(--muted);font-size:0.9rem;border-top:1px solid rgba(255,255,255,0.02)}
-@media(min-width:900px){.hero-inner{flex-direction:row;justify-content:space-between;align-items:center}.hero h1{font-size:3rem}.course-card.featured{transform:scale(1.08)}}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  margin: 0;
+  color: var(--white);
+  background: linear-gradient(180deg, #071025 0%, #071527 60%);
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: var(--max-width); margin: 0 auto; padding: 0 20px; }
+
+/* --- HEADER --- */
+.site-header {
+  backdrop-filter: saturate(140%) blur(6px);
+  position: sticky;
+  top: 0;
+  background: rgba(7, 13, 26, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  z-index: 100;
+}
+
+.header-inner { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+.brand { font-weight: 700; font-size: 1.05rem; color: var(--white); }
+.nav a { color: var(--muted); margin-left: 18px; text-decoration: none; transition: color 0.3s; }
+.nav a:hover { color: var(--accent); }
+
+/* --- HERO --- */
+.hero { padding: 90px 0 80px; background: linear-gradient(90deg, rgba(6, 11, 26, 0.6), rgba(6, 11, 26, 0.1)); }
+.hero-inner { display: flex; flex-direction: column; gap: 18px; }
+.hero h1 { font-size: 2.25rem; line-height: 1.05; margin: 0; background: linear-gradient(to right, #fff, #9aa4b2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.lead { color: var(--muted); max-width: 700px; }
+
+/* --- BUTTONS --- */
+.btn {
+  display: inline-block;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: #022;
+  padding: 12px 24px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.3s, transform 0.2s;
+  width: 100%; /* Полная ширина на мобильных */
+  text-align: center;
+}
+.btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-primary { background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* --- SECTIONS & CARDS --- */
+.section { padding: 60px 0; }
+.section.alt { background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent); }
+.section-title { margin: 0 0 40px; font-size: 1.5rem; text-align: center; }
+
+.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+
+.course-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  padding: 40px 30px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s;
+}
+
+.course-card:hover { border-color: rgba(255, 255, 255, 0.15); }
+.course-card.featured { border: 2px solid var(--accent); transform: scale(1.02); z-index: 2; }
+
+.course-card h3 { margin: 0 0 15px; font-size: 1.4rem; color: var(--white); }
+.price { font-size: 2.5rem; font-weight: 700; color: var(--accent); margin: 20px 0; }
+
+.features { list-style: none; padding: 0; margin: 30px 0; flex-grow: 1; }
+.features li { padding: 8px 0; color: var(--muted); border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
+.features li:last-child { border-bottom: none; }
+
+.badge { position: absolute; top: 20px; right: 20px; background: var(--accent); color: #022; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+
+/* --- MODALS (Updated for Logic) --- */
+.modal {
+  display: none; /* JS переключает это на block */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Скролл, если контент высокий */
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background: var(--card);
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  margin: 5vh auto; /* Центрирование с отступом сверху */
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.term-modal .modal-content { max-width: 700px; } /* Terms шире */
+
+.modal-body {
+  max-height: 60vh;
+  overflow-y: auto;
+  margin: 20px 0;
+  padding-right: 10px; /* Чтобы скроллбар не налипал */
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Стилизация скроллбара внутри модалки */
+.modal-body::-webkit-scrollbar { width: 8px; }
+.modal-body::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+.modal-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+.modal-body::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+.close { position: absolute; top: 15px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer; color: var(--muted); z-index: 10; }
+.close:hover { color: var(--white); }
+
+/* --- ЮРИДИЧЕСКИЕ БЛОКИ (Dark Mode) --- */
+.modal-body h3 { color: var(--white); margin-top: 25px; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
+.modal-body ul, .modal-body ol { padding-left: 20px; margin-bottom: 15px; }
+.modal-body p { margin-bottom: 15px; }
+
+/* Желтый блок "Billing Notice" */
+.billing-notice {
+  background-color: var(--warning-bg);
+  color: var(--warning-text);
+  padding: 15px;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9em;
+}
+.billing-notice strong { color: #fbbf24; }
+
+/* Синий блок "Refund Policy" */
+.refund-policy {
+  background-color: var(--info-bg);
+  padding: 15px;
+  border-left: 4px solid var(--info-border);
+  margin-bottom: 20px;
+  color: #dbeafe;
+}
+.refund-policy strong { color: var(--accent-2); }
+
+/* --- CHECKBOX & PAYPAL --- */
+.checkbox-container { display: flex; align-items: flex-start; gap: 12px; margin: 20px 0; }
+.checkbox-container input[type="checkbox"] { margin-top: 4px; cursor: pointer; accent-color: var(--accent); }
+.checkbox-container label { cursor: pointer; color: var(--muted); font-size: 0.9rem; line-height: 1.4; }
+.checkbox-container a { color: var(--accent); text-decoration: none; }
+.checkbox-container a:hover { text-decoration: underline; }
+
+#paypal-button-container { margin-top: 25px; min-height: 150px; }
+
+/* --- FOOTER & MEDIA --- */
+.site-footer { padding: 30px 0; color: var(--muted); font-size: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.02); text-align: center; }
+
+@media (min-width: 900px) {
+  .hero-inner { flex-direction: row; justify-content: space-between; align-items: center; }
+  .hero h1 { font-size: 3rem; }
+  .course-card.featured { transform: scale(1.05); }
+  .btn { width: auto; } /* На десктопе кнопка нормальной ширины */
+}
