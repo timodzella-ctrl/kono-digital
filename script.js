@@ -1,75 +1,75 @@
-// Переменные для хранения данных
+// State variables to hold selected course data
 let currentCourse = {
     title: "",
     price: 0
 };
 
-// Получаем элементы со страницы
+// DOM Elements
 const modal = document.getElementById("paymentModal");
 const courseTitleEl = document.getElementById("courseTitle");
 const coursePriceEl = document.getElementById("coursePrice");
 const agreeCheckbox = document.getElementById("agreeTerms");
 const paypalContainer = document.getElementById("paypal-button-container");
-const closeModalBtn = document.getElementById("closeModalBtn"); // Убедись, что в HTML у крестика есть id="closeModalBtn"
+const closeModalBtn = document.getElementById("closeModalBtn");
 
-// --- 1. ОТКРЫТИЕ ОКНА ---
+// --- 1. MODAL LOGIC (OPEN) ---
 function selectCourse(title, price) {
     currentCourse.title = title;
     currentCourse.price = price;
 
-    // Обновляем текст в модалке
+    // Update Modal Text
     courseTitleEl.innerText = title;
     coursePriceEl.innerText = `Price: €${price}`;
     
-    // Сбрасываем чекбокс и скрываем PayPal при каждом открытии
+    // Reset Checkbox and hide PayPal buttons on every open
     agreeCheckbox.checked = false;
     paypalContainer.style.display = "none"; 
-    paypalContainer.innerHTML = ""; // Очищаем старые кнопки
+    paypalContainer.innerHTML = ""; // Clear any existing buttons
     
-    // Показываем окно
+    // Show Modal
     modal.style.display = "block";
 }
 
-// --- 2. ЗАКРЫТИЕ ОКНА ---
+// --- 2. MODAL LOGIC (CLOSE) ---
 function closeModal() {
     modal.style.display = "none";
-    paypalContainer.innerHTML = ""; // Очищаем кнопки при закрытии
+    paypalContainer.innerHTML = ""; // Clean up to prevent duplicates
 }
 
-// Закрытие по клику на крестик
+// Close on 'X' click
 if (closeModalBtn) {
     closeModalBtn.onclick = closeModal;
 }
 
-// Закрытие по клику вне окна
+// Close on click outside modal
 window.onclick = function(event) {
     if (event.target == modal) {
         closeModal();
     }
 }
 
-// --- 3. ЛОГИКА ГАЛОЧКИ (ГЛАВНОЕ ИСПРАВЛЕНИЕ) ---
+// --- 3. CHECKBOX LOGIC (REQUIRED) ---
 agreeCheckbox.addEventListener('change', function() {
     if (this.checked) {
-        // Если галочка стоит — показываем блок и рисуем кнопки
+        // User agreed -> Show PayPal buttons
         paypalContainer.style.display = "block";
         renderPayPalButtons();
     } else {
-        // Если галочку убрали — прячем всё
+        // User unchecked -> Hide buttons
         paypalContainer.style.display = "none";
         paypalContainer.innerHTML = "";
     }
 });
 
-// --- 4. ФУНКЦИЯ ОТРИСОВКИ PAYPAL ---
+// --- 4. PAYPAL INTEGRATION ---
 function renderPayPalButtons() {
-    // Защита от дублирования: очищаем контейнер перед отрисовкой
+    // Safety check: clear container
     paypalContainer.innerHTML = "";
 
     paypal.Buttons({
         style: {
             layout: 'vertical',
-            color:  'blue',
+            color:  'blue', // Options: gold, blue, silver, black
             shape:  'rect',
             label:  'pay'
         },
@@ -88,25 +88,26 @@ function renderPayPalButtons() {
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
                 console.log('Payment successful:', details);
-                alert(`Спасибо, ${details.payer.name.given_name}! Оплата прошла успешно.`);
+                // SUCCESS ACTION
+                alert(`Thank you, ${details.payer.name.given_name}! Payment successful.`);
                 closeModal();
             });
         },
 
         onError: function (err) {
             console.error('PayPal Error:', err);
-            alert("Ошибка PayPal. Проверьте консоль.");
+            alert("Payment Error. Please try again.");
         }
     }).render('#paypal-button-container');
 }
 
-// --- 5. ФУНКЦИИ ДЛЯ ЮРИДИЧЕСКИХ ОКОН ---
+// --- 5. LEGAL MODALS LOGIC ---
 function openTerms() { document.getElementById("termsModal").style.display = "block"; }
 function closeTerms() { document.getElementById("termsModal").style.display = "none"; }
 function openPrivacy() { document.getElementById("privacyModal").style.display = "block"; }
 function closePrivacy() { document.getElementById("privacyModal").style.display = "none"; }
 
-// Закрытие доп. окон по клику вне их области
+// Close legal modals when clicking outside
 window.addEventListener('click', function(e) {
     if (e.target == document.getElementById("termsModal")) closeTerms();
     if (e.target == document.getElementById("privacyModal")) closePrivacy();
