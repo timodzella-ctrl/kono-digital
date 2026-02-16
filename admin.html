@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kono Admin Panel</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Специфичные стили для админки */
+    .admin-container { max-width: 800px; margin: 50px auto; padding: 20px; }
+    .login-wrapper { text-align: center; margin-top: 100px; }
+    .admin-content { display: none; } /* Скрыто по умолчанию */
+    
+    input[type="password"] {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #333;
+      background: #0b1624;
+      color: white;
+      font-size: 1rem;
+    }
+    
+    iframe { border: none; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+  </style>
+</head>
+<body>
+
+  <div id="loginScreen" class="container login-wrapper">
+    <h1>Admin Access</h1>
+    <p class="lead">Enter security key to access CRM</p>
+    <input type="password" id="adminPass" placeholder="Enter Password">
+    <button class="btn btn-primary" onclick="checkPass()" style="width: auto; margin-top: 10px;">Login</button>
+    <p id="errorMsg" style="color: #e74c3c; margin-top: 10px; display: none;">Access Denied</p>
+  </div>
+
+  <div id="adminPanel" class="container admin-content">
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+      <div class="brand">Kono CRM</div>
+      <a href="index.html" class="btn" style="width: auto; background: #333; color: #fff;">Back to Site</a>
+    </header>
+
+    <div class="course-card" style="width: 100%;">
+      <h3>Manual Transaction Entry</h3>
+      <p style="color: #9aa4b2; margin-bottom: 20px;">Use this form to log PayPal transactions manually.</p>
+      
+      <div style="text-align: center; color: red;">
+         ЗДЕСЬ ДОЛЖЕН БЫТЬ ТВОЙ IFRAME ИЗ GOOGLE FORMS
+      </div>
+      </div>
+    
+    <div style="margin-top: 30px; text-align: center;">
+      <p>Data is saved securely to Google Sheets.</p>
+      <a href="https://docs.google.com/spreadsheets" target="_blank" style="color: var(--accent);">Open Spreadsheet Database &rarr;</a>
+    </div>
+  </div>
+
+  <script>
+    function checkPass() {
+      const pass = document.getElementById('adminPass').value;
+      // Простой пароль. Можешь поменять 'admin123' на свой.
+      // ПРЕДУПРЕЖДЕНИЕ: Это защита от дурака, а не от хакера. 
+      // На GitHub код виден всем. Но для личного пользования пойдет.
+      if (pass === 'admin123') {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+      } else {
+        document.getElementById('errorMsg').style.display = 'block';
+      }
+    }
+  </script>
+
+</body>
+</html>
