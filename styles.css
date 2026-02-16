@@ -57,7 +57,7 @@ body {
   border: none;
   cursor: pointer;
   transition: opacity 0.3s, transform 0.2s;
-  width: 100%; /* Полная ширина на мобильных */
+  width: 100%; /* Full width on mobile */
   text-align: center;
 }
 .btn:hover { opacity: 0.9; transform: translateY(-1px); }
@@ -94,16 +94,16 @@ body {
 
 .badge { position: absolute; top: 20px; right: 20px; background: var(--accent); color: #022; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
 
-/* --- MODALS (Updated for Logic) --- */
+/* --- MODALS (Updated Logic) --- */
 .modal {
-  display: none; /* JS переключает это на block */
+  display: none; /* JS toggles this to block */
   position: fixed;
   z-index: 1000;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto; /* Скролл, если контент высокий */
+  overflow: auto;
   background-color: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(5px);
 }
@@ -116,22 +116,22 @@ body {
   max-width: 500px;
   width: 90%;
   position: relative;
-  margin: 5vh auto; /* Центрирование с отступом сверху */
+  margin: 5vh auto;
   box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
 
-.term-modal .modal-content { max-width: 700px; } /* Terms шире */
+.term-modal .modal-content { max-width: 700px; } /* Wider for Terms */
 
 .modal-body {
   max-height: 60vh;
   overflow-y: auto;
   margin: 20px 0;
-  padding-right: 10px; /* Чтобы скроллбар не налипал */
+  padding-right: 10px;
   color: var(--muted);
   font-size: 0.95rem;
 }
 
-/* Стилизация скроллбара внутри модалки */
+/* Scrollbar styles */
 .modal-body::-webkit-scrollbar { width: 8px; }
 .modal-body::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
 .modal-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
@@ -140,12 +140,12 @@ body {
 .close { position: absolute; top: 15px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer; color: var(--muted); z-index: 10; }
 .close:hover { color: var(--white); }
 
-/* --- ЮРИДИЧЕСКИЕ БЛОКИ (Dark Mode) --- */
+/* --- LEGAL BLOCKS (Dark Mode) --- */
 .modal-body h3 { color: var(--white); margin-top: 25px; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
 .modal-body ul, .modal-body ol { padding-left: 20px; margin-bottom: 15px; }
 .modal-body p { margin-bottom: 15px; }
 
-/* Желтый блок "Billing Notice" */
+/* Yellow Billing Notice */
 .billing-notice {
   background-color: var(--warning-bg);
   color: var(--warning-text);
@@ -157,7 +157,7 @@ body {
 }
 .billing-notice strong { color: #fbbf24; }
 
-/* Синий блок "Refund Policy" */
+/* Blue Refund Policy */
 .refund-policy {
   background-color: var(--info-bg);
   padding: 15px;
@@ -183,5 +183,5 @@ body {
   .hero-inner { flex-direction: row; justify-content: space-between; align-items: center; }
   .hero h1 { font-size: 3rem; }
   .course-card.featured { transform: scale(1.05); }
-  .btn { width: auto; } /* На десктопе кнопка нормальной ширины */
+  .btn { width: auto; }
 }
