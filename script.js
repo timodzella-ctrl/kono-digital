@@ -1,60 +1,70 @@
-// Данные текущего выбора
+// Переменные для хранения данных
 let currentCourse = {
     title: "",
     price: 0
 };
 
-// Элементы DOM
+// Получаем элементы со страницы
 const modal = document.getElementById("paymentModal");
 const courseTitleEl = document.getElementById("courseTitle");
 const coursePriceEl = document.getElementById("coursePrice");
 const agreeCheckbox = document.getElementById("agreeTerms");
 const paypalContainer = document.getElementById("paypal-button-container");
-const closeModalBtn = document.getElementById("closeModalBtn");
+const closeModalBtn = document.getElementById("closeModalBtn"); // Убедись, что в HTML у крестика есть id="closeModalBtn"
 
-// --- 1. Управление окном оплаты ---
-
+// --- 1. ОТКРЫТИЕ ОКНА ---
 function selectCourse(title, price) {
     currentCourse.title = title;
     currentCourse.price = price;
 
+    // Обновляем текст в модалке
     courseTitleEl.innerText = title;
     coursePriceEl.innerText = `Price: €${price}`;
     
-    // Сброс при новом открытии
+    // Сбрасываем чекбокс и скрываем PayPal при каждом открытии
     agreeCheckbox.checked = false;
     paypalContainer.style.display = "none"; 
-    paypalContainer.innerHTML = ""; // Очистка старых кнопок
+    paypalContainer.innerHTML = ""; // Очищаем старые кнопки
     
+    // Показываем окно
     modal.style.display = "block";
 }
 
+// --- 2. ЗАКРЫТИЕ ОКНА ---
 function closeModal() {
     modal.style.display = "none";
-    paypalContainer.innerHTML = ""; 
+    paypalContainer.innerHTML = ""; // Очищаем кнопки при закрытии
 }
 
-closeModalBtn.onclick = closeModal;
+// Закрытие по клику на крестик
+if (closeModalBtn) {
+    closeModalBtn.onclick = closeModal;
+}
+
+// Закрытие по клику вне окна
 window.onclick = function(event) {
-    if (event.target == modal) closeModal();
+    if (event.target == modal) {
+        closeModal();
+    }
 }
 
-// --- 2. Логика Галочки (Согласие) ---
-
+// --- 3. ЛОГИКА ГАЛОЧКИ (ГЛАВНОЕ ИСПРАВЛЕНИЕ) ---
 agreeCheckbox.addEventListener('change', function() {
     if (this.checked) {
+        // Если галочка стоит — показываем блок и рисуем кнопки
         paypalContainer.style.display = "block";
         renderPayPalButtons();
     } else {
+        // Если галочку убрали — прячем всё
         paypalContainer.style.display = "none";
         paypalContainer.innerHTML = "";
     }
 });
 
-// --- 3. Логика PayPal ---
-
+// --- 4. ФУНКЦИЯ ОТРИСОВКИ PAYPAL ---
 function renderPayPalButtons() {
-    paypalContainer.innerHTML = ""; // Защита от дублей
+    // Защита от дублирования: очищаем контейнер перед отрисовкой
+    paypalContainer.innerHTML = "";
 
     paypal.Buttons({
         style: {
@@ -78,26 +88,25 @@ function renderPayPalButtons() {
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
                 console.log('Payment successful:', details);
-                // ДЕЙСТВИЕ ПОСЛЕ УСПЕШНОЙ ОПЛАТЫ
-                alert(`Спасибо, ${details.payer.name.given_name}! Оплата прошла успешно. Проверьте почту.`);
+                alert(`Спасибо, ${details.payer.name.given_name}! Оплата прошла успешно.`);
                 closeModal();
             });
         },
 
         onError: function (err) {
             console.error('PayPal Error:', err);
-            alert("Ошибка соединения с PayPal. Попробуйте позже.");
+            alert("Ошибка PayPal. Проверьте консоль.");
         }
     }).render('#paypal-button-container');
 }
 
-// --- 4. Управление окнами Terms и Privacy ---
+// --- 5. ФУНКЦИИ ДЛЯ ЮРИДИЧЕСКИХ ОКОН ---
 function openTerms() { document.getElementById("termsModal").style.display = "block"; }
 function closeTerms() { document.getElementById("termsModal").style.display = "none"; }
 function openPrivacy() { document.getElementById("privacyModal").style.display = "block"; }
 function closePrivacy() { document.getElementById("privacyModal").style.display = "none"; }
 
-// Закрытие доп. окон по клику вне (для удобства)
+// Закрытие доп. окон по клику вне их области
 window.addEventListener('click', function(e) {
     if (e.target == document.getElementById("termsModal")) closeTerms();
     if (e.target == document.getElementById("privacyModal")) closePrivacy();
