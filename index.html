@@ -30,12 +30,12 @@
       <div class="container">
         <h2 class="section-title">Our Courses</h2>
         <div class="pricing-grid">
+          
           <div class="course-card">
             <h3>Digital Basics</h3>
             <div class="price">€250</div>
             <ul class="features">
               <li>Fundamentals of web design (HTML/CSS)</li>
-              <li>5 video lessons</li>
               <li>3 practical projects</li>
               <li>6 months access</li>
               <li>Email support</li>
@@ -51,7 +51,6 @@
               <li>Everything in Digital Basics +</li>
               <li>JavaScript & React basics</li>
               <li>Backend with Node.js</li>
-              <li>8 video lessons</li>
               <li>5 practical projects</li>
               <li>1 year access</li>
               <li>Priority email support</li>
@@ -66,7 +65,6 @@
               <li>ALL courses included</li>
               <li>Advanced UI/UX Design</li>
               <li>Mobile Development (React Native)</li>
-              <li>20+ video lessons</li>
               <li>12 practical projects</li>
               <li>Lifetime access</li>
               <li>1-on-1 consultation (2 hours)</li>
@@ -75,6 +73,7 @@
             </ul>
             <button class="btn btn-primary" onclick="selectCourse('Pro Bundle', 350)">Buy Now</button>
           </div>
+
         </div>
       </div>
     </section>
@@ -103,8 +102,8 @@
       <div class="checkbox-container">
         <input type="checkbox" id="agreeTerms" />
         <label for="agreeTerms">
-          I have read and agree to the <a href="#" onclick="openTerms(); return false;">Terms and Conditions</a> 
-          and <a href="#" onclick="openPrivacy(); return false;">Privacy Policy</a>
+          I have read and agree to the <a href="#" onclick="document.getElementById('termsModal').style.display='block'; return false;">Terms and Conditions</a> 
+          and <a href="#" onclick="document.getElementById('privacyModal').style.display='block'; return false;">Privacy Policy</a>
         </label>
       </div>
 
@@ -114,11 +113,10 @@
 
   <div id="termsModal" class="modal">
     <div class="modal-content term-modal">
-      <span class="close" onclick="closeTerms()">&times;</span>
+      <span class="close" onclick="document.getElementById('termsModal').style.display='none'">&times;</span>
       <h2>Terms and Conditions</h2>
       
       <div class="modal-body">
-        
         <div class="billing-notice">
           <strong>Important billing notice:</strong> Payments are processed by our registered entity in Poland. The descriptor "Kono Digital" (or similar) will appear on your bank statement. Do not dispute a charge solely because you do not recognize this descriptor.
         </div>
@@ -173,7 +171,7 @@
 
   <div id="privacyModal" class="modal">
     <div class="modal-content term-modal">
-      <span class="close" onclick="closePrivacy()">&times;</span>
+      <span class="close" onclick="document.getElementById('privacyModal').style.display='none'">&times;</span>
       <h2>Privacy Policy</h2>
       <div class="modal-body">
         <p><strong>Effective Date:</strong> February 17, 2026</p>
@@ -207,11 +205,31 @@
 
   <footer class="site-footer">
     <div class="container">
-      © 2026 Kono Digital — All rights reserved
+      <div class="footer-inner">
+        
+        <div class="footer-brand">
+          <span>Kono Digital</span> © 2026
+        </div>
+
+        <div class="footer-links">
+          <a href="#" onclick="document.getElementById('termsModal').style.display='block'; return false;">Terms and Conditions</a>
+          <span class="separator">|</span>
+          <a href="#" onclick="document.getElementById('privacyModal').style.display='block'; return false;">Privacy Policy</a>
+        </div>
+
+      </div>
     </div>
   </footer>
 
   <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
   <script src="script.js"></script>
+  
+  <script>
+    window.onclick = function(event) {
+      if (event.target.classList.contains('modal')) {
+        event.target.style.display = "none";
+      }
+    }
+  </script>
 </body>
 </html>
