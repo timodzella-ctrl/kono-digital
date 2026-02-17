@@ -35,7 +35,7 @@
             <h3>Digital Basics</h3>
             <div class="price">€250</div>
             <ul class="features">
-              <li>Fundamentals of web design (HTML/CSS)</li>
+              <li>Fundamentals of web design (HTML/CSS) <span style="color:#5eead4;">— Lifetime access</span></li>
               <li>Email support</li>
             </ul>
             <button class="btn btn-primary" onclick="selectCourse('Digital Basics', 250)">Buy Now</button>
@@ -46,9 +46,9 @@
             <h3>Full Stack Developer</h3>
             <div class="price">€300</div>
             <ul class="features">
-              <li>Everything in Digital Basics +</li>
-              <li>JavaScript & React basics</li>
-              <li>Backend with Node.js</li>
+              <li>Everything in Digital Basics <span style="color:#5eead4;">— Lifetime access</span> +</li>
+              <li>JavaScript & React basics <span style="color:#5eead4;">— Lifetime access</span></li>
+              <li>Backend with Node.js <span style="color:#5eead4;">— Lifetime access</span></li>
               <li>Priority email support</li>
             </ul>
             <button class="btn btn-primary" onclick="selectCourse('Full Stack Developer', 300)">Buy Now</button>
@@ -58,12 +58,9 @@
             <h3>Pro Bundle</h3>
             <div class="price">€350</div>
             <ul class="features">
-              <li>ALL courses included</li>
-              <li>Advanced UI/UX Design</li>
-              <li>Mobile Development (React Native)</li>
-              <li>1-on-1 consultation (2 hours)</li>
-              <li>Private Discord community</li>
-              <li>Certificate of completion</li>
+              <li>ALL courses included <span style="color:#5eead4;">— Lifetime access</span></li>
+              <li>Advanced UI/UX Design <span style="color:#5eead4;">— Lifetime access</span></li>
+              <li>Mobile Development (React Native) <span style="color:#5eead4;">— Lifetime access</span></li>
             </ul>
             <button class="btn btn-primary" onclick="selectCourse('Pro Bundle', 350)">Buy Now</button>
           </div>
@@ -221,7 +218,7 @@
   <script>
     window.onclick = function(event) {
       if (event.target.classList.contains('modal')) {
-        event.target.style.display = "none";
+        event.target.style.display = \"none\";
       }
     }
   </script>
