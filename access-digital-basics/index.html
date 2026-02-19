@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kono Digital - Course Access</title>
+  <style>
+    :root {
+      --bg: #0f1724; --card: #1e293b; --muted: #9aa4b2;
+      --accent: #5eead4; --white: #f8fafc;
+    }
+    body {
+      font-family: Inter, system-ui, -apple-system; margin: 0;
+      color: var(--white); background: var(--bg);
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh; flex-direction: column;
+    }
+    .container {
+      background: var(--card); padding: 40px; border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1); width: 90%; max-width: 400px;
+      text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    .logo-svg { margin-bottom: 20px; }
+    h2 { margin: 0 0 10px 0; font-size: 1.5rem; }
+    p { color: var(--muted); font-size: 0.9rem; margin-bottom: 25px; line-height: 1.5; }
+    
+    input {
+      width: 100%; padding: 0 15px; background: #0f1724; border: 1px solid rgba(255,255,255,0.1);
+      color: white; border-radius: 10px; outline: none; height: 48px; box-sizing: border-box;
+      font-size: 1rem; margin-bottom: 15px; text-align: center; letter-spacing: 2px;
+    }
+    input:focus { border-color: var(--accent); }
+    
+    .btn {
+      background: var(--accent); color: #000; padding: 0 20px; height: 48px;
+      border-radius: 10px; font-weight: 800; border: none; cursor: pointer;
+      width: 100%; font-size: 1rem; transition: 0.3s; text-transform: uppercase;
+      display: flex; justify-content: center; align-items: center; text-decoration: none;
+    }
+    .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+    
+    .error { color: #ef4444; font-size: 0.85rem; margin-top: 15px; display: none; }
+    
+    #contentBox { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="loginBox">
+    <svg class="logo-svg" width="48" height="48" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="40" height="40" rx="8" fill="#0f1724"/>
+      <path d="M12 10V30" stroke="#5eead4" stroke-width="3" stroke-linecap="round"/>
+      <path d="M12 20H16L24 10" stroke="#5eead4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M16 20L24 30" stroke="#5eead4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="32" cy="8" r="3" fill="#5eead4"/>
+    </svg>
+    <h2>Digital Basics Access</h2>
+    <p>Please enter the access code provided after your purchase.</p>
+    
+    <input type="password" id="passInput" placeholder="ENTER CODE" onkeypress="if(event.key === 'Enter') unlock()">
+    <button class="btn" onclick="unlock()">Unlock Course</button>
+    <div class="error" id="errorMsg">Incorrect access code. Try again.</div>
+  </div>
+
+  <div class="container" id="contentBox">
+    <h2>Access Granted</h2>
+    <p>Welcome to Digital Basics. Click the button below to access your study materials and downloads.</p>
+    <a href="#" id="courseLink" class="btn" target="_blank">Open Course Materials</a>
+  </div>
+
+  <script>
+    // Настройки доступа
+    const SECRET_CODE = "kono250"; // Пароль для клиента
+    
+    // Твоя зашифрованная ссылка на Mega
+    const ENCRYPTED_LINK = "aHR0cHM6Ly9tZWdhLm56L2ZvbGRlci9ZWWtDQ0s1QiM0ckNyMVpVRXMtbFlTamhEVFhkbWxn"; 
+
+    function unlock() {
+      const input = document.getElementById('passInput').value.trim();
+      const error = document.getElementById('errorMsg');
+      
+      if (input === SECRET_CODE) {
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('contentBox').style.display = 'block';
+        document.getElementById('courseLink').href = atob(ENCRYPTED_LINK);
+      } else {
+        error.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
