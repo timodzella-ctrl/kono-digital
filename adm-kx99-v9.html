@@ -52,7 +52,6 @@
       border: 1px solid rgba(255,255,255,0.06); 
       
       display: grid; 
-      /* Оптимизированная сетка под доп. поле */
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
       gap: 15px; 
       align-items: end; 
@@ -180,7 +179,8 @@
   </div>
 
   <script>
-    const BIN_ID = "69939c421a35bc0895802a0e"; 
+    // ТВОЙ НОВЫЙ РАБОЧИЙ BIN ID
+    const BIN_ID = "69977faeae596e708f384504"; 
     const API_KEY = "$2a$10$UjMBcBnIIYxfPNVocHLdNeQyJq3vLbmSzG6zbPclsESfUzGHOgKqG";
     const PASSWORD = "admin123$"; 
     let salesData = [];
@@ -219,7 +219,6 @@
             headers: { 'X-Master-Key': API_KEY } 
         });
         
-        // Отлов ошибки скачивания
         if (!res.ok) {
             const errText = await res.text();
             throw new Error(`JSONBin error ${res.status}: ${errText}`);
@@ -227,7 +226,6 @@
 
         const d = await res.json();
         
-        // Железная распаковка форматов
         if (Array.isArray(d.record)) {
             salesData = d.record;
         } else if (d.record && Array.isArray(d.record.customers)) {
@@ -272,7 +270,6 @@
           price: price 
       };
 
-      // Бэкап на случай ошибки
       const backupData = [...salesData];
 
       if (editingId) { 
@@ -292,7 +289,6 @@
           body: JSON.stringify(salesData)
         });
         
-        // Отлов ошибки сохранения
         if (!response.ok) {
             const errorDetails = await response.text();
             throw new Error(`Код: ${response.status}. Ответ: ${errorDetails}`);
@@ -307,8 +303,8 @@
         setNow(); 
         renderTable();
       } catch (e) { 
-          salesData = backupData; // Откат
-          alert("ОШИБКА СОХРАНЕНИЯ!\n\n" + e.message + "\n\nСкопируй этот текст."); 
+          salesData = backupData;
+          alert("ОШИБКА СОХРАНЕНИЯ!\n\n" + e.message); 
       }
       showLoader(false);
     }
