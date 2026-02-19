@@ -217,16 +217,25 @@
       try {
         const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: { 'X-Master-Key': API_KEY } });
         const d = await res.json();
-        salesData = d.record || [];
+        
+        // --- ЖЕЛЕЗНАЯ ЗАЩИТА ОТ КОНФЛИКТА ФОРМАТОВ ---
+        if (Array.isArray(d.record)) {
+            salesData = d.record;
+        } else if (d.record && Array.isArray(d.record.customers)) {
+            salesData = d.record.customers; 
+        } else {
+            salesData = [];
+        }
+        
         renderTable();
-      } catch (e) { alert(e); }
+      } catch (e) { alert("Data loading error: " + e); }
       showLoader(false);
     }
 
     async function handleFormSubmit() {
       const name = document.getElementById('nameInput').value;
       const email = document.getElementById('emailInput').value;
-      const txnId = document.getElementById('txnInput').value; // Читаем TXN ID
+      const txnId = document.getElementById('txnInput').value; 
       const price = parseFloat(document.getElementById('priceInput').value);
       
       const dateVal = document.getElementById('datePart').value;
@@ -247,7 +256,7 @@
           rawTime: timeVal,
           name: name,
           email, 
-          txnId: txnId, // Сохраняем TXN ID
+          txnId: txnId, 
           product: document.getElementById('productInput').value, 
           price 
       };
@@ -269,7 +278,7 @@
         editingId = null; 
         document.getElementById('nameInput').value = "";
         document.getElementById('emailInput').value = ""; 
-        document.getElementById('txnInput').value = ""; // Очищаем TXN ID
+        document.getElementById('txnInput').value = ""; 
         document.getElementById('submitBtn').innerText = "+ Sync"; 
         setNow(); 
         renderTable();
@@ -325,7 +334,7 @@
 
       document.getElementById('nameInput').value = item.name || "";
       document.getElementById('emailInput').value = item.email;
-      document.getElementById('txnInput').value = item.txnId || ""; // Восстанавливаем TXN ID
+      document.getElementById('txnInput').value = item.txnId || ""; 
       document.getElementById('productInput').value = item.product;
       document.getElementById('priceInput').value = item.price;
       
