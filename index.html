@@ -42,17 +42,13 @@
     }
 
     /* ФИКС ЦВЕТА ПОЧТЫ И ССЫЛОК */
-    .modal-body a, 
-    .footer-links a, 
-    .section p a {
+    .modal-body a, .footer-links a, .section p a {
       color: #5eead4 !important; 
       text-decoration: underline;
       font-weight: 600;
       transition: color 0.2s;
     }
-    .modal-body a:hover, 
-    .footer-links a:hover, 
-    .section p a:hover {
+    .modal-body a:hover, .footer-links a:hover, .section p a:hover {
       color: #ffffff !important;
       text-decoration: none;
     }
@@ -64,13 +60,28 @@
       margin-bottom: 20px;
       font-size: 0.9rem;
     }
+
+    /* СТИЛИ ДЛЯ ПОЛЯ ПРОМОКОДА */
+    .promo-input-group {
+      display: flex; gap: 10px; margin-top: 15px; margin-bottom: 5px;
+    }
+    .promo-input-group input {
+      flex: 1; padding: 12px; background: #0f1724; border: 1px solid #334155; 
+      color: white; border-radius: 8px; outline: none; font-family: Inter;
+    }
+    .promo-input-group input:focus { border-color: #5eead4; }
+    .promo-input-group button {
+      padding: 0 20px; background: #5eead4; color: #0f1724; border: none; 
+      font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s;
+    }
+    .promo-input-group button:hover { background: white; }
   </style>
 </head>
 <body>
 
   <div class="promo-banner">
     <span class="promo-badge">Limited Offer</span>
-    <span>Get 8% OFF your first course! Use code: <span class="promo-code">KONO230</span> (€250 → €230)</span>
+    <span>Get 8% OFF your first course! Use code: <span class="promo-code">KONO230</span></span>
   </div>
 
   <header class="site-header">
@@ -85,7 +96,6 @@
         </svg>
         <span style="font-weight: 800; font-size: 20px; color: white; letter-spacing: -0.5px; text-transform: uppercase;">Kono Digital</span>
       </div>
-
       <nav class="nav">
         <a href="#courses">Courses</a>
         <a href="#about">About</a>
@@ -117,7 +127,7 @@
               <li style="color:#5eead4;">Lifetime access granted — Course loads automatically after payment</li>
               <li>Email support</li>
             </ul>
-            <button class="btn btn-primary" onclick="selectCourse('Digital Basics', 230)">Buy with Code</button>
+            <button class="btn btn-primary" onclick="selectCourse('Digital Basics', 250)">Buy Now</button>
           </div>
 
           <div class="course-card featured">
@@ -158,7 +168,16 @@
     <div class="modal-content">
       <span class="close" id="closeModalBtn">&times;</span>
       <h2 id="courseTitle">Select Course</h2>
-      <p id="coursePrice">Price: €0</p>
+      <p id="coursePrice" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">Price: €0</p>
+      
+      <div id="promoContainer" style="display: none; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #334155;">
+        <label style="font-size: 0.85rem; color: #9aa4b2;">Have a promo code?</label>
+        <div class="promo-input-group">
+          <input type="text" id="promoCodeInput" placeholder="Enter code here...">
+          <button onclick="applyPromo()">Apply</button>
+        </div>
+        <p id="promoMessage" style="font-size: 0.85rem; margin-top: 5px; margin-bottom: 0;"></p>
+      </div>
       
       <div class="checkbox-container">
         <input type="checkbox" id="agreeTerms" />
@@ -176,43 +195,34 @@
     <div class="modal-content term-modal">
       <span class="close" onclick="document.getElementById('termsModal').style.display='none'">&times;</span>
       <h2>Terms and Conditions</h2>
-      
       <div class="modal-body">
         <div class="billing-notice">
           <strong>Important billing notice:</strong> Payments are processed by an individual professional service provider. The descriptor "Kono Digital" will appear on your bank statement. Do not dispute a charge solely because you do not recognize this descriptor.
         </div>
-
         <h3>1. Introduction</h3>
         <p>Welcome to <strong>Kono Digital</strong>. By accessing our website and purchasing our products, you verify that you have read, understood, and agree to be legally bound by these terms of individual professional services.</p>
-
         <h3>2. Products and Services</h3>
         <ul>
           <li>We provide digital educational materials (online courses).</li>
           <li><strong>Format:</strong> Delivered digitally (downloadable PDF study guides and text resources).</li>
           <li><strong>Access:</strong> Granted online immediately upon purchase; no physical goods are shipped.</li>
         </ul>
-
         <h3>3. Payment Terms</h3>
         <ul>
           <li><strong>Currency:</strong> All prices are in EUR.</li>
           <li><strong>Payment model:</strong> One-time payment only.</li>
         </ul>
-
         <div class="refund-policy">
           <h3>4. Refund Policy & Customer Satisfaction</h3>
           <p>We stand by the quality of our educational materials. However, if you feel that the product did not meet your expectations, we are open to reviewing your case.</p>
           <p>If you are unsatisfied with your purchase, please contact us at <a href="mailto:support@kono-digital.com">support@kono-digital.com</a> with the reason for your dissatisfaction. We review all requests on a case-by-case basis and can issue a refund if the situation warrants it.</p>
         </div>
-
         <h3>5. Dispute Resolution Protocol</h3>
         <p>Before opening any claim or chargeback with PayPal or your bank, you agree to email our support first. We are committed to resolving any issues directly with you, including processing legitimate refund requests, within 48 hours.</p>
-
         <h3>6. Intellectual Property</h3>
         <p>All content is the exclusive intellectual property of Kono Digital. Reselling or distributing materials is strictly prohibited.</p>
-
         <h3>7. Governing Law</h3>
         <p>These Terms are governed by the regulations applicable to individual professional service providers. Any dispute not settled amicably is subject to the exclusive jurisdiction of the competent courts.</p>
-
         <h3>8. Contact Us</h3>
         <p>Email: <a href="mailto:support@kono-digital.com">support@kono-digital.com</a></p>
       </div>
@@ -225,13 +235,11 @@
       <h2>Privacy Policy</h2>
       <div class="modal-body">
         <p>We comply with data protection regulations. We collect only what is necessary to deliver your purchase and maintain security audit logs as proof of delivery.</p>
-        
         <h3>1. Information We Collect</h3>
         <ul>
           <li><strong>Personal info:</strong> Name, email address.</li>
           <li><strong>Payment info:</strong> Processed securely by PayPal. We do not store card details.</li>
         </ul>
-
         <h3>2. Contact Us</h3>
         <p>Email: <a href="mailto:support@kono-digital.com">support@kono-digital.com</a></p>
       </div>
@@ -241,9 +249,7 @@
   <footer class="site-footer">
     <div class="container">
       <div class="footer-inner">
-        <div class="footer-brand">
-          <span>Kono Digital</span> © 2026
-        </div>
+        <div class="footer-brand"><span>Kono Digital</span> © 2026</div>
         <div class="footer-links">
           <a href="#" onclick="document.getElementById('termsModal').style.display='block'; return false;">Terms and Conditions</a>
           <span class="separator">|</span>
