@@ -1,155 +1,98 @@
-// --- STATE VARIABLES ---
-let currentCourse = {
-    title: "",
-    basePrice: 0,
-    finalPrice: 0,
-    isPromoApplied: false
-};
+// --- Глобальные переменные ---
+let finalPriceBasics = 250;
+let isPromoApplied = false;
 
-// --- DOM ELEMENTS ---
-const modal = document.getElementById("paymentModal");
-const courseTitleEl = document.getElementById("courseTitle");
-const coursePriceEl = document.getElementById("coursePrice");
-const agreeCheckbox = document.getElementById("agreeTerms");
-const paypalContainer = document.getElementById("paypal-button-container");
-const closeModalBtn = document.getElementById("closeModalBtn");
-
-// Promo DOM Elements
-const promoContainer = document.getElementById("promoContainer");
-const promoCodeInput = document.getElementById("promoCodeInput");
-const promoMessage = document.getElementById("promoMessage");
-
-// --- 1. MODAL LOGIC (OPEN) ---
-function selectCourse(title, price) {
-    currentCourse.title = title;
-    currentCourse.basePrice = price;
-    currentCourse.finalPrice = price; // По умолчанию финальная цена равна базовой
-    currentCourse.isPromoApplied = false;
-
-    // Обновляем текст в модалке
-    courseTitleEl.innerText = title;
-    coursePriceEl.innerText = `Price: €${price}`;
-    coursePriceEl.style.color = "white"; // Сброс цвета
+// --- 1. ОТКРЫТИЕ БЛОКА ОПЛАТЫ ВНУТРИ КАРТОЧКИ ---
+function initCheckout(type) {
+    // Прячем кнопку "Buy Now"
+    document.getElementById('btn-buy-' + type).style.display = 'none';
     
-    // Сбрасываем промо-блок
-    if (promoCodeInput) promoCodeInput.value = "";
-    if (promoMessage) promoMessage.innerText = "";
-    
-    // Показываем поле ввода промокода ТОЛЬКО для Digital Basics
-    if (promoContainer) {
-        promoContainer.style.display = (title === 'Digital Basics') ? "block" : "none";
-    }
-
-    // Сбрасываем чекбокс и прячем кнопки PayPal
-    agreeCheckbox.checked = false;
-    paypalContainer.style.display = "none"; 
-    paypalContainer.innerHTML = ""; 
-    
-    // Показываем модалку
-    modal.style.display = "block";
+    // Показываем скрытый блок оплаты с анимацией
+    document.getElementById('checkout-' + type).style.display = 'block';
 }
 
-// --- 2. MODAL LOGIC (CLOSE) ---
-function closeModal() {
-    modal.style.display = "none";
-    paypalContainer.innerHTML = ""; // Очищаем, чтобы не плодить дубликаты кнопок
-}
-
-// Закрытие по крестику
-if (closeModalBtn) {
-    closeModalBtn.onclick = closeModal;
-}
-
-// Закрытие при клике мимо модалки (оставил твою логику, но добавил проверку на другие модалки)
-window.onclick = function(event) {
-    if (event.target.classList.contains('modal')) {
-        event.target.style.display = "none";
-    }
-}
-
-// --- 3. PROMO CODE LOGIC ---
+// --- 2. ЛОГИКА ПРОМОКОДА (Только для Digital Basics) ---
 function applyPromo() {
-    if (currentCourse.isPromoApplied) {
-        promoMessage.innerText = "Promo code already applied!";
-        promoMessage.style.color = "#fbbf24"; // Желтый
-        return;
-    }
-
-    const code = promoCodeInput.value.trim().toUpperCase();
+    if (isPromoApplied) return;
     
-    if (code === "KONO230" && currentCourse.title === 'Digital Basics') {
-        currentCourse.finalPrice = 230; // Применяем скидку
-        currentCourse.isPromoApplied = true;
+    const codeInput = document.getElementById('promo-input-basics').value.trim().toUpperCase();
+    const msgEl = document.getElementById('promo-msg-basics');
+    const priceEl = document.getElementById('price-display-basics');
+    
+    if (codeInput === 'KONO230') {
+        finalPriceBasics = 230;
+        isPromoApplied = true;
         
-        // Визуальное подтверждение
-        coursePriceEl.innerText = "Price: €230 (Discount Applied)";
-        coursePriceEl.style.color = "#5eead4"; 
+        // Красивое зачеркивание старой цены
+        priceEl.innerHTML = '<span style="text-decoration: line-through; color: #9aa4b2; font-size: 1.2rem;">€250</span> €230';
+        priceEl.style.color = '#5eead4';
         
-        promoMessage.innerText = "Success! 8% discount applied.";
-        promoMessage.style.color = "#5eead4";
+        msgEl.innerText = 'Success! 8% discount applied.';
+        msgEl.style.color = '#5eead4';
         
-        // Если чекбокс уже нажат, перерисовываем кнопки с новой ценой
-        if (agreeCheckbox.checked) {
-            renderPayPalButtons();
+        // Если галочка уже стоит, перерисовываем PayPal с новой ценой
+        if (document.getElementById('agree-basics').checked) {
+            renderPayPal('basics', finalPriceBasics, 'Digital Basics (Promo: KONO230)');
         }
     } else {
-        promoMessage.innerText = "Invalid promo code.";
-        promoMessage.style.color = "#ef4444"; // Красный
+        msgEl.innerText = 'Invalid promo code.';
+        msgEl.style.color = '#ef4444';
     }
 }
 
-// --- 4. CHECKBOX LOGIC (REQUIRED) ---
-agreeCheckbox.addEventListener('change', function() {
-    if (this.checked) {
-        // Юзер согласен -> Показываем кнопки
-        paypalContainer.style.display = "block";
-        renderPayPalButtons();
+// --- 3. ЛОГИКА ГАЛОЧКИ ---
+function togglePayPal(type) {
+    const isChecked = document.getElementById('agree-' + type).checked;
+    const container = document.getElementById('paypal-container-' + type);
+    
+    if (isChecked) {
+        container.style.display = 'block';
+        
+        // Определяем цену и название в зависимости от выбранного курса
+        const price = (type === 'basics') ? finalPriceBasics : 300;
+        let description = (type === 'basics') ? 'Digital Basics' : 'Full Stack Developer';
+        
+        // Добавляем пометку в чек PayPal, если был применен промокод
+        if (type === 'basics' && isPromoApplied) {
+            description += ' (Promo: KONO230)';
+        }
+        
+        renderPayPal(type, price, description);
     } else {
-        // Юзер убрал галочку -> Прячем кнопки
-        paypalContainer.style.display = "none";
-        paypalContainer.innerHTML = "";
+        container.style.display = 'none';
+        container.innerHTML = ''; // Очищаем кнопки PayPal, чтобы не было дублей
     }
-});
+}
 
-// --- 5. PAYPAL INTEGRATION ---
-function renderPayPalButtons() {
-    paypalContainer.innerHTML = ""; // Очищаем контейнер
-
+// --- 4. РЕНДЕР КНОПОК PAYPAL ---
+function renderPayPal(type, price, description) {
+    const containerId = '#paypal-container-' + type;
+    document.querySelector(containerId).innerHTML = ''; // Зачистка перед рендером
+    
     paypal.Buttons({
         style: {
             layout: 'vertical',
-            color:  'blue', 
+            color:  'blue',
             shape:  'rect',
             label:  'pay'
         },
-
         createOrder: function(data, actions) {
-            // Добавляем пометку о промокоде в чек PayPal для твоей защиты
-            let description = currentCourse.title;
-            if (currentCourse.isPromoApplied) {
-                description += " (Promo: KONO230)";
-            }
-
             return actions.order.create({
                 purchase_units: [{
                     description: description,
-                    amount: {
-                        value: currentCourse.finalPrice.toString() // Берем цену со скидкой
-                    }
+                    amount: { value: price.toString() }
                 }]
             });
         },
-
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
-                // ГЛАВНОЕ ИСПРАВЛЕНИЕ: Автоматический редирект на курс вместо простого "Спасибо"
+                // Успешная оплата -> Прямой редирект к скачиванию курса
                 window.location.href = "https://kono-digital.com/access-digital-basics";
             });
         },
-
         onError: function (err) {
             console.error('PayPal Error:', err);
             alert("Payment Error. Please try again.");
         }
-    }).render('#paypal-button-container');
+    }).render(containerId);
 }
