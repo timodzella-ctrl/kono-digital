@@ -72,6 +72,14 @@
     
     #contentBox { display: none; }
     #contentBox h2 { color: var(--accent); }
+    
+    /* Анимация ошибки */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    .shake { animation: shake 0.3s ease-in-out; }
   </style>
 </head>
 <body>
@@ -106,8 +114,9 @@
 
   <script>
     const SECRET_CODE = "kono250";
-    // Зашифрованная ссылка с заглавной буквой "I" в ключе
-    const ENCRYPTED_LINK = "aHR0cHM6Ly9tZWdhLm56L2ZvbGRlci9ZWWtDQ0s1QiM0ckNyMVpVRXMtSVlTamhEVFhkbWxn"; 
+    
+    // Твоя новая зашифрованная ссылка на Mega
+    const ENCRYPTED_LINK = "aHR0cHM6Ly9tZWdhLm56L2ZvbGRlci9ZWWtDQ0s1QiM0ckNyMVpVZXMtSVlTamhEVFhkbWxn"; 
 
     function unlock() {
       const input = document.getElementById('passInput').value.trim();
