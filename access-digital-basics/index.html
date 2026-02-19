@@ -12,7 +12,6 @@
     body {
       font-family: Inter, system-ui, -apple-system; margin: 0;
       color: var(--white); 
-      /* Добавил стильный фоновый паттерн */
       background-color: var(--bg);
       background-image: radial-gradient(rgba(94, 234, 212, 0.1) 1px, transparent 1px), radial-gradient(rgba(94, 234, 212, 0.1) 1px, transparent 1px);
       background-size: 40px 40px;
@@ -21,20 +20,18 @@
       min-height: 100vh; flex-direction: column; padding: 20px; box-sizing: border-box;
     }
 
-    /* Новый главный заголовок страницы */
     .page-title {
         font-size: 2.5rem; font-weight: 800; margin-bottom: 40px; 
         text-align: center; letter-spacing: -1px;
     }
 
     .container {
-      background: var(--card); padding: 50px 40px; border-radius: 24px; /* Больше воздуха и скругления */
+      background: var(--card); padding: 50px 40px; border-radius: 24px;
       border: 1px solid rgba(255,255,255,0.05); width: 100%; max-width: 420px;
       text-align: center; 
-      box-shadow: 0 25px 60px rgba(0,0,0,0.6); /* Более мягкая и глубокая тень */
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6); 
       position: relative; overflow: hidden;
     }
-    /* Декоративная полоска сверху */
     .container::before {
         content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
         background: linear-gradient(90deg, var(--accent), #60a5fa);
@@ -58,9 +55,7 @@
       font-size: 1rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
       text-transform: uppercase; letter-spacing: 1px;
       display: inline-flex; justify-content: center; align-items: center; 
-      text-decoration: none;
-      /* Кнопка теперь не на всю ширину, а аккуратная по центру */
-      width: auto; min-width: 220px; 
+      text-decoration: none; width: auto; min-width: 220px; 
       box-shadow: 0 10px 30px rgba(94, 234, 212, 0.3);
     }
     .btn:hover { 
@@ -111,8 +106,8 @@
 
   <script>
     const SECRET_CODE = "kono250";
-    // Твоя правильная, исправленная ссылка
-    const ENCRYPTED_LINK = "aHR0cHM6Ly9tZWdhLm56L2ZvbGRlci9ZWWtDQ0s1QiM0ckNyMVpVRXMtbFlTamhEVFhkbWxn"; 
+    // Зашифрованная ссылка с заглавной буквой "I" в ключе
+    const ENCRYPTED_LINK = "aHR0cHM6Ly9tZWdhLm56L2ZvbGRlci9ZWWtDQ0s1QiM0ckNyMVpVRXMtSVlTamhEVFhkbWxn"; 
 
     function unlock() {
       const input = document.getElementById('passInput').value.trim();
