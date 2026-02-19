@@ -18,14 +18,14 @@
       font-size: 0.9rem;
       font-weight: 600;
       border-bottom: 2px solid #5eead4;
-      position: sticky;
-      top: 0;
+      position: relative; /* Не перекрывает фиксированную шапку при скролле */
       z-index: 1000;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 10px;
     }
+
     .promo-badge {
       background: #5eead4;
       color: #0f172a;
@@ -35,20 +35,26 @@
       text-transform: uppercase;
       font-size: 0.75rem;
     }
+
     .promo-code {
       color: #5eead4;
       font-weight: 800;
       letter-spacing: 1px;
     }
 
-    /* ФИКС ЦВЕТА ПОЧТЫ И ССЫЛОК */
-    .modal-body a, .footer-links a, .section p a {
-      color: #5eead4 !important; 
+    /* ФИКС ЦВЕТА ПОЧТЫ И ССЫЛОК В ЮРИДИЧЕСКИХ ОКНАХ */
+    .modal-body a, 
+    .footer-links a, 
+    .section p a {
+      color: #5eead4 !important;
       text-decoration: underline;
       font-weight: 600;
       transition: color 0.2s;
     }
-    .modal-body a:hover, .footer-links a:hover, .section p a:hover {
+
+    .modal-body a:hover, 
+    .footer-links a:hover, 
+    .section p a:hover {
       color: #ffffff !important;
       text-decoration: none;
     }
@@ -61,20 +67,91 @@
       font-size: 0.9rem;
     }
 
-    /* СТИЛИ ДЛЯ ПОЛЯ ПРОМОКОДА */
+    /* СТИЛИ ДЛЯ ВСТРОЕННОЙ ОПЛАТЫ ПРЯМО В КАРТОЧКУ (Без модалок) */
+    .promo-hint {
+      color: #5eead4;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: inline-block;
+      background: rgba(94, 234, 212, 0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .embedded-checkout {
+      display: none; /* Скрыто до нажатия Buy Now */
+      background: #0f1724;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      text-align: left;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
     .promo-input-group {
-      display: flex; gap: 10px; margin-top: 15px; margin-bottom: 5px;
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      margin-bottom: 5px;
     }
+
     .promo-input-group input {
-      flex: 1; padding: 12px; background: #0f1724; border: 1px solid #334155; 
-      color: white; border-radius: 8px; outline: none; font-family: Inter;
+      flex: 1;
+      padding: 10px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: white;
+      border-radius: 6px;
+      outline: none;
+      font-family: Inter;
     }
-    .promo-input-group input:focus { border-color: #5eead4; }
+
+    .promo-input-group input:focus {
+      border-color: #5eead4;
+    }
+
     .promo-input-group button {
-      padding: 0 20px; background: #5eead4; color: #0f1724; border: none; 
-      font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s;
+      padding: 0 15px;
+      background: #5eead4;
+      color: #0f1724;
+      border: none;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.2s;
     }
-    .promo-input-group button:hover { background: white; }
+
+    .promo-input-group button:hover {
+      background: white;
+    }
+    
+    .checkbox-container-inline {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+
+    .checkbox-container-inline input {
+      margin-top: 4px;
+      cursor: pointer;
+    }
+
+    .checkbox-container-inline label {
+      font-size: 0.85rem;
+      color: #9aa4b2;
+      line-height: 1.4;
+    }
   </style>
 </head>
 <body>
@@ -119,15 +196,32 @@
           
           <div class="course-card">
             <h3>Digital Basics</h3>
-            <div class="price">€250</div>
+            <div class="promo-hint">Use code KONO230 for 8% OFF</div>
+            <div class="price" id="price-display-basics">€250</div>
             <ul class="features">
               <li>Fundamentals of web design (HTML/CSS)</li>
               <li>Access to digital resource library</li>
               <li>Comprehensive PDF study guides</li>
-              <li style="color:#5eead4;">Lifetime access granted — Course loads automatically after payment</li>
-              <li>Email support</li>
+              <li style="color:#5eead4;">Lifetime access granted immediately</li>
             </ul>
-            <button class="btn btn-primary" onclick="selectCourse('Digital Basics', 250)">Buy Now</button>
+            
+            <button class="btn btn-primary" id="btn-buy-basics" onclick="initCheckout('basics')">Buy Now</button>
+            
+            <div class="embedded-checkout" id="checkout-basics">
+              <label style="font-size: 0.85rem; color: #9aa4b2;">Have a promo code?</label>
+              <div class="promo-input-group">
+                <input type="text" id="promo-input-basics" placeholder="Enter code...">
+                <button onclick="applyPromo()">Apply</button>
+              </div>
+              <p id="promo-msg-basics" style="font-size: 0.85rem; margin: 5px 0 15px 0;"></p>
+              
+              <div class="checkbox-container-inline">
+                <input type="checkbox" id="agree-basics" onchange="togglePayPal('basics')" />
+                <label for="agree-basics">I agree to the <a href="#" onclick="document.getElementById('termsModal').style.display='block'; return false;">Terms</a> and <a href="#" onclick="document.getElementById('privacyModal').style.display='block'; return false;">Privacy Policy</a></label>
+              </div>
+              
+              <div id="paypal-container-basics" style="display: none;"></div>
+            </div>
           </div>
 
           <div class="course-card featured">
@@ -138,11 +232,19 @@
               <li>Everything in Digital Basics +</li>
               <li>JavaScript & React.js fundamentals</li>
               <li>Backend architecture with Node.js</li>
-              <li>Downloadable source code templates</li>
-              <li style="color:#5eead4;">Lifetime access granted — Course loads automatically after payment</li>
-              <li>Priority email support</li>
+              <li style="color:#5eead4;">Lifetime access granted immediately</li>
             </ul>
-            <button class="btn btn-primary" onclick="selectCourse('Full Stack Developer', 300)">Buy Now</button>
+            
+            <button class="btn btn-primary" id="btn-buy-pro" onclick="initCheckout('pro')">Buy Now</button>
+            
+            <div class="embedded-checkout" id="checkout-pro">
+              <div class="checkbox-container-inline">
+                <input type="checkbox" id="agree-pro" onchange="togglePayPal('pro')" />
+                <label for="agree-pro">I agree to the <a href="#" onclick="document.getElementById('termsModal').style.display='block'; return false;">Terms</a> and <a href="#" onclick="document.getElementById('privacyModal').style.display='block'; return false;">Privacy Policy</a></label>
+              </div>
+              
+              <div id="paypal-container-pro" style="display: none;"></div>
+            </div>
           </div>
 
         </div>
@@ -163,33 +265,6 @@
       </div>
     </section>
   </main>
-
-  <div id="paymentModal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="closeModalBtn">&times;</span>
-      <h2 id="courseTitle">Select Course</h2>
-      <p id="coursePrice" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">Price: €0</p>
-      
-      <div id="promoContainer" style="display: none; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #334155;">
-        <label style="font-size: 0.85rem; color: #9aa4b2;">Have a promo code?</label>
-        <div class="promo-input-group">
-          <input type="text" id="promoCodeInput" placeholder="Enter code here...">
-          <button onclick="applyPromo()">Apply</button>
-        </div>
-        <p id="promoMessage" style="font-size: 0.85rem; margin-top: 5px; margin-bottom: 0;"></p>
-      </div>
-      
-      <div class="checkbox-container">
-        <input type="checkbox" id="agreeTerms" />
-        <label for="agreeTerms">
-          I have read and agree to the <a href="#" onclick="document.getElementById('termsModal').style.display='block'; return false;">Terms and Conditions</a> 
-          and <a href="#" onclick="document.getElementById('privacyModal').style.display='block'; return false;">Privacy Policy</a>
-        </label>
-      </div>
-
-      <div id="paypal-button-container" style="margin-top: 20px; display: none;"></div>
-    </div>
-  </div>
 
   <div id="termsModal" class="modal">
     <div class="modal-content term-modal">
@@ -263,6 +338,7 @@
   <script src="script.js"></script>
   
   <script>
+    // Закрытие модалок (Terms / Privacy) при клике вне их области
     window.onclick = function(event) {
       if (event.target.classList.contains('modal')) {
         event.target.style.display = "none";
