@@ -1,10 +1,12 @@
-// State variables to hold selected course data
+// --- STATE VARIABLES ---
 let currentCourse = {
     title: "",
-    price: 0
+    basePrice: 0,
+    finalPrice: 0,
+    isPromoApplied: false
 };
 
-// DOM Elements
+// --- DOM ELEMENTS ---
 const modal = document.getElementById("paymentModal");
 const courseTitleEl = document.getElementById("courseTitle");
 const coursePriceEl = document.getElementById("coursePrice");
@@ -12,74 +14,127 @@ const agreeCheckbox = document.getElementById("agreeTerms");
 const paypalContainer = document.getElementById("paypal-button-container");
 const closeModalBtn = document.getElementById("closeModalBtn");
 
+// Promo DOM Elements
+const promoContainer = document.getElementById("promoContainer");
+const promoCodeInput = document.getElementById("promoCodeInput");
+const promoMessage = document.getElementById("promoMessage");
+
 // --- 1. MODAL LOGIC (OPEN) ---
 function selectCourse(title, price) {
     currentCourse.title = title;
-    currentCourse.price = price;
+    currentCourse.basePrice = price;
+    currentCourse.finalPrice = price; // По умолчанию финальная цена равна базовой
+    currentCourse.isPromoApplied = false;
 
-    // Update Modal Text
+    // Обновляем текст в модалке
     courseTitleEl.innerText = title;
     coursePriceEl.innerText = `Price: €${price}`;
+    coursePriceEl.style.color = "white"; // Сброс цвета
     
-    // Reset Checkbox and hide PayPal buttons on every open
+    // Сбрасываем промо-блок
+    if (promoCodeInput) promoCodeInput.value = "";
+    if (promoMessage) promoMessage.innerText = "";
+    
+    // Показываем поле ввода промокода ТОЛЬКО для Digital Basics
+    if (promoContainer) {
+        promoContainer.style.display = (title === 'Digital Basics') ? "block" : "none";
+    }
+
+    // Сбрасываем чекбокс и прячем кнопки PayPal
     agreeCheckbox.checked = false;
     paypalContainer.style.display = "none"; 
-    paypalContainer.innerHTML = ""; // Clear any existing buttons
+    paypalContainer.innerHTML = ""; 
     
-    // Show Modal
+    // Показываем модалку
     modal.style.display = "block";
 }
 
 // --- 2. MODAL LOGIC (CLOSE) ---
 function closeModal() {
     modal.style.display = "none";
-    paypalContainer.innerHTML = ""; // Clean up to prevent duplicates
+    paypalContainer.innerHTML = ""; // Очищаем, чтобы не плодить дубликаты кнопок
 }
 
-// Close on 'X' click
+// Закрытие по крестику
 if (closeModalBtn) {
     closeModalBtn.onclick = closeModal;
 }
 
-// Close on click outside modal
+// Закрытие при клике мимо модалки (оставил твою логику, но добавил проверку на другие модалки)
 window.onclick = function(event) {
-    if (event.target == modal) {
-        closeModal();
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = "none";
     }
 }
 
-// --- 3. CHECKBOX LOGIC (REQUIRED) ---
+// --- 3. PROMO CODE LOGIC ---
+function applyPromo() {
+    if (currentCourse.isPromoApplied) {
+        promoMessage.innerText = "Promo code already applied!";
+        promoMessage.style.color = "#fbbf24"; // Желтый
+        return;
+    }
+
+    const code = promoCodeInput.value.trim().toUpperCase();
+    
+    if (code === "KONO230" && currentCourse.title === 'Digital Basics') {
+        currentCourse.finalPrice = 230; // Применяем скидку
+        currentCourse.isPromoApplied = true;
+        
+        // Визуальное подтверждение
+        coursePriceEl.innerText = "Price: €230 (Discount Applied)";
+        coursePriceEl.style.color = "#5eead4"; 
+        
+        promoMessage.innerText = "Success! 8% discount applied.";
+        promoMessage.style.color = "#5eead4";
+        
+        // Если чекбокс уже нажат, перерисовываем кнопки с новой ценой
+        if (agreeCheckbox.checked) {
+            renderPayPalButtons();
+        }
+    } else {
+        promoMessage.innerText = "Invalid promo code.";
+        promoMessage.style.color = "#ef4444"; // Красный
+    }
+}
+
+// --- 4. CHECKBOX LOGIC (REQUIRED) ---
 agreeCheckbox.addEventListener('change', function() {
     if (this.checked) {
-        // User agreed -> Show PayPal buttons
+        // Юзер согласен -> Показываем кнопки
         paypalContainer.style.display = "block";
         renderPayPalButtons();
     } else {
-        // User unchecked -> Hide buttons
+        // Юзер убрал галочку -> Прячем кнопки
         paypalContainer.style.display = "none";
         paypalContainer.innerHTML = "";
     }
 });
 
-// --- 4. PAYPAL INTEGRATION ---
+// --- 5. PAYPAL INTEGRATION ---
 function renderPayPalButtons() {
-    // Safety check: clear container
-    paypalContainer.innerHTML = "";
+    paypalContainer.innerHTML = ""; // Очищаем контейнер
 
     paypal.Buttons({
         style: {
             layout: 'vertical',
-            color:  'blue', // Options: gold, blue, silver, black
+            color:  'blue', 
             shape:  'rect',
             label:  'pay'
         },
 
         createOrder: function(data, actions) {
+            // Добавляем пометку о промокоде в чек PayPal для твоей защиты
+            let description = currentCourse.title;
+            if (currentCourse.isPromoApplied) {
+                description += " (Promo: KONO230)";
+            }
+
             return actions.order.create({
                 purchase_units: [{
-                    description: currentCourse.title,
+                    description: description,
                     amount: {
-                        value: currentCourse.price
+                        value: currentCourse.finalPrice.toString() // Берем цену со скидкой
                     }
                 }]
             });
@@ -87,10 +142,8 @@ function renderPayPalButtons() {
 
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
-                console.log('Payment successful:', details);
-                // SUCCESS ACTION
-                alert(`Thank you, ${details.payer.name.given_name}! Payment successful.`);
-                closeModal();
+                // ГЛАВНОЕ ИСПРАВЛЕНИЕ: Автоматический редирект на курс вместо простого "Спасибо"
+                window.location.href = "https://kono-digital.com/access-digital-basics";
             });
         },
 
@@ -100,15 +153,3 @@ function renderPayPalButtons() {
         }
     }).render('#paypal-button-container');
 }
-
-// --- 5. LEGAL MODALS LOGIC ---
-function openTerms() { document.getElementById("termsModal").style.display = "block"; }
-function closeTerms() { document.getElementById("termsModal").style.display = "none"; }
-function openPrivacy() { document.getElementById("privacyModal").style.display = "block"; }
-function closePrivacy() { document.getElementById("privacyModal").style.display = "none"; }
-
-// Close legal modals when clicking outside
-window.addEventListener('click', function(e) {
-    if (e.target == document.getElementById("termsModal")) closeTerms();
-    if (e.target == document.getElementById("privacyModal")) closePrivacy();
-});
