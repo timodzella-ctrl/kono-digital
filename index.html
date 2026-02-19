@@ -8,6 +8,20 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   
   <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    /* ФИКС ЦВЕТА ПОЧТЫ В МОДАЛЬНЫХ ОКНАХ */
+    .modal-body a {
+      color: #5eead4 !important; /* Тот самый яркий бирюзовый цвет */
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .modal-body a:hover {
+      color: #ffffff !important;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -204,7 +218,6 @@
   <footer class="site-footer">
     <div class="container">
       <div class="footer-inner">
-        
         <div class="footer-brand" style="display: flex; align-items: center; gap: 8px;">
            <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="40" height="40" rx="8" fill="#1e293b"/>
@@ -221,7 +234,6 @@
           <span class="separator">|</span>
           <a href="#" onclick="document.getElementById('privacyModal').style.display='block'; return false;">Privacy Policy</a>
         </div>
-
       </div>
     </div>
   </footer>
