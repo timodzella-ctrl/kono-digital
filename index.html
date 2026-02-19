@@ -10,20 +10,70 @@
   <link rel="stylesheet" href="styles.css">
   
   <style>
-    /* ФИКС ЦВЕТА ПОЧТЫ В МОДАЛЬНЫХ ОКНАХ */
-    .modal-body a {
-      color: #5eead4 !important; /* Тот самый яркий бирюзовый цвет */
+    /* --- ПЛАШКА ПРОМОКОДА (Твое прикрытие для PayPal) --- */
+    .promo-banner {
+      background: linear-gradient(90deg, #1e293b, #0f172a);
+      color: #ffffff;
+      text-align: center;
+      padding: 12px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-bottom: 2px solid #5eead4;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    .promo-badge {
+      background: #5eead4;
+      color: #0f172a;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+    .promo-code {
+      color: #5eead4;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    /* ФИКС ЦВЕТА ПОЧТЫ И ССЫЛОК */
+    .modal-body a, 
+    .footer-links a, 
+    .section p a {
+      color: #5eead4 !important; /* Твой фирменный бирюзовый */
       text-decoration: underline;
       font-weight: 600;
       transition: color 0.2s;
     }
-    .modal-body a:hover {
+    .modal-body a:hover, 
+    .footer-links a:hover, 
+    .section p a:hover {
       color: #ffffff !important;
       text-decoration: none;
+    }
+
+    .billing-notice {
+      background: rgba(94, 234, 212, 0.05);
+      border-left: 4px solid #5eead4;
+      padding: 15px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
+
+  <div class="promo-banner">
+    <span class="promo-badge">Limited Offer</span>
+    <span>Get 8% OFF your first course! Use code: <span class="promo-code">KONO230</span> (€250 → €230)</span>
+  </div>
+
   <header class="site-header">
     <div class="container header-inner">
       <div class="brand" style="display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="window.scrollTo(0,0);">
@@ -68,7 +118,7 @@
               <li style="color:#5eead4;">Lifetime access granted — Course loads automatically after payment</li>
               <li>Email support</li>
             </ul>
-            <button class="btn btn-primary" onclick="selectCourse('Digital Basics', 250)">Buy Now</button>
+            <button class="btn btn-primary" onclick="selectCourse('Digital Basics', 230)">Buy with Code</button>
           </div>
 
           <div class="course-card featured">
@@ -100,7 +150,7 @@
     <section id="contact" class="section">
       <div class="container">
         <h2 class="section-title">Questions?</h2>
-        <p>Email us at: <a href="mailto:support@kono-digital.com" style="color: #5eead4; text-decoration: none; font-weight: bold;">support@kono-digital.com</a></p>
+        <p>Email us at: <a href="mailto:support@kono-digital.com" style="font-weight: bold;">support@kono-digital.com</a></p>
       </div>
     </section>
   </main>
@@ -130,50 +180,36 @@
       
       <div class="modal-body">
         <div class="billing-notice">
-          <strong>Important billing notice:</strong> Payments are processed by our registered entity in Poland. The descriptor "Kono Digital" (or similar) will appear on your bank statement. Do not dispute a charge solely because you do not recognize this descriptor.
+          <strong>Important billing notice:</strong> Payments are processed by an individual professional service provider. The descriptor "Kono Digital" will appear on your bank statement. Do not dispute a charge solely because you do not recognize this descriptor.
         </div>
 
         <h3>1. Introduction</h3>
-        <p>Welcome to <strong>Kono Digital</strong>. By accessing our website and purchasing our products, you verify that you have read, understood, and agree to be legally bound by these terms.</p>
+        <p>Welcome to <strong>Kono Digital</strong>. By accessing our website and purchasing our products, you verify that you have read, understood, and agree to be legally bound by these terms of individual professional services.</p>
 
         <h3>2. Products and Services</h3>
         <ul>
           <li>We provide digital educational materials (online courses).</li>
-          <li><strong>Format:</strong> Delivered digitally (downloadable guides, video lessons, access to restricted materials).</li>
+          <li><strong>Format:</strong> Delivered digitally (downloadable guides, video lessons).</li>
           <li><strong>Access:</strong> Granted online immediately upon purchase; no physical goods are shipped.</li>
         </ul>
 
         <h3>3. Payment Terms</h3>
         <ul>
-          <li><strong>Currency:</strong> All prices are listed and charged in EUR.</li>
-          <li><strong>Payment model:</strong> One-time payment only. No subscriptions.</li>
-        </ul>
-
-        <h3>4. Delivery Policy</h3>
-        <ul>
-          <li><strong>Instant delivery:</strong> Content is unlocked immediately or sent via email after payment.</li>
-          <li><strong>Proof of delivery:</strong> Server logs (IP address, timestamp, location) are maintained as valid proof of delivery and consumption in case of dispute.</li>
+          <li><strong>Currency:</strong> All prices are in EUR.</li>
+          <li><strong>Payment model:</strong> One-time payment only.</li>
         </ul>
 
         <div class="refund-policy">
           <h3>5. Refund Policy & Right of Withdrawal Waiver</h3>
-          <p><strong>Important notice for consumers (EU/Poland):</strong></p>
-          <p>By clicking "Buy Now" or "Pay", you consent to immediate performance of the contract (delivery of digital content) and <strong>acknowledge that you lose your right of withdrawal</strong> once download or access has started, per <strong>Article 38 of the Consumer Rights Act (Ustawa o prawach konsumenta)</strong>.</p>
+          <p>By clicking "Buy Now" or "Pay", you consent to immediate delivery of digital content and <strong>acknowledge that you lose your right of withdrawal</strong> once access has started, per standard digital goods regulations.</p>
           <p>All sales are final and non-refundable once access details have been sent.</p>
-          <p><strong>No refunds for:</strong> Change of mind, failure to read description, or financial hardship.</p>
         </div>
 
-        <h3>6. Mandatory Dispute Resolution Protocol</h3>
-        <ul>
-          <li><strong>Contact first:</strong> Before opening any claim or chargeback with PayPal/Bank, you agree to email our support and allow 48 hours to resolve.</li>
-          <li><strong>Warning:</strong> Opening a dispute without prior contact is a breach of these Terms and may result in immediate ban.</li>
-        </ul>
-
-        <h3>7. Intellectual Property</h3>
-        <p>All content is the exclusive intellectual property of Kono Digital. Reselling or distributing login details is strictly prohibited.</p>
+        <h3>6. Dispute Resolution Protocol</h3>
+        <p>Before opening any claim or chargeback with PayPal/Bank, you agree to email our support and allow 48 hours to resolve. All access logs are recorded as proof of service delivery.</p>
 
         <h3>8. Governing Law</h3>
-        <p>These Terms are governed by the laws of <strong>Poland</strong>. Any dispute not settled amicably is subject to the exclusive jurisdiction of the courts in Poland.</p>
+        <p>These Terms are governed by the regulations applicable to individual professional service providers. Любой спор подлежит разрешению в компетентных судах по месту нахождения исполнителя.</p>
 
         <h3>9. Contact Us</h3>
         <p>Email: <a href="mailto:support@kono-digital.com">support@kono-digital.com</a></p>
@@ -186,30 +222,15 @@
       <span class="close" onclick="document.getElementById('privacyModal').style.display='none'">&times;</span>
       <h2>Privacy Policy</h2>
       <div class="modal-body">
-        <p><strong>Effective Date:</strong> February 17, 2026</p>
-        <p>We comply with GDPR and Polish data protection regulations. We collect only what is necessary to deliver your purchase.</p>
+        <p>We comply with data protection regulations. We collect only what is necessary to deliver your purchase and maintain security audit logs as proof of delivery.</p>
         
         <h3>1. Information We Collect</h3>
         <ul>
           <li><strong>Personal info:</strong> Name, email address.</li>
-          <li><strong>Payment info:</strong> We do NOT store credit card details. Processed securely by PayPal.</li>
-          <li><strong>Technical data (Security Logs):</strong> We collect IP addresses and timestamps. <strong>This data is used as strict proof of delivery and security audit logs.</strong></li>
+          <li><strong>Payment info:</strong> Processed securely by PayPal. We do not store card details.</li>
         </ul>
 
-        <h3>2. How We Use Your Data</h3>
-        <ol>
-          <li>Order fulfillment and delivery.</li>
-          <li>Customer support.</li>
-          <li>Legal: To prevent fraud and maintain server logs as proof of delivery (Audit Log).</li>
-        </ol>
-
-        <h3>3. Data Sharing</h3>
-        <p>Data is shared only with PayPal (for payment processing) and legal authorities if required for dispute evidence.</p>
-
-        <h3>4. Your Rights (GDPR)</h3>
-        <p>You may request data deletion ("Right to be Forgotten") <strong>unless</strong> legal requirements (tax laws or dispute evidence retention) require us to keep it.</p>
-
-        <h3>5. Contact Us</h3>
+        <h3>2. Contact Us</h3>
         <p>Email: <a href="mailto:support@kono-digital.com">support@kono-digital.com</a></p>
       </div>
     </div>
@@ -218,17 +239,9 @@
   <footer class="site-footer">
     <div class="container">
       <div class="footer-inner">
-        <div class="footer-brand" style="display: flex; align-items: center; gap: 8px;">
-           <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="40" height="40" rx="8" fill="#1e293b"/>
-            <path d="M12 10V30" stroke="#5eead4" stroke-width="3" stroke-linecap="round"/>
-            <path d="M12 20H16L24 10" stroke="#5eead4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M16 20L24 30" stroke="#5eead4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="32" cy="8" r="3" fill="#5eead4"/>
-          </svg>
+        <div class="footer-brand">
           <span>Kono Digital</span> © 2026
         </div>
-
         <div class="footer-links">
           <a href="#" onclick="document.getElementById('termsModal').style.display='block'; return false;">Terms and Conditions</a>
           <span class="separator">|</span>
