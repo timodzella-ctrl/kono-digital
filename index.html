@@ -59,18 +59,17 @@
       text-decoration: none;
     }
 
-    /* --- НОВОЕ: ФИКС ЦВЕТА ССЫЛОК ВНУТРИ БЛОКА ОПЛАТЫ (Чекбокс) --- */
+    /* ФИКС ЦВЕТА ССЫЛОК ВНУТРИ БЛОКА ОПЛАТЫ (Чекбокс) */
     .checkbox-container-inline label a {
-      color: #5eead4 !important; /* Твой фирменный бирюзовый */
+      color: #5eead4 !important;
       text-decoration: underline;
       font-weight: 600;
       transition: color 0.2s;
     }
     .checkbox-container-inline label a:hover {
-      color: #ffffff !important; /* Белый при наведении */
+      color: #ffffff !important;
       text-decoration: none;
     }
-    /* ---------------------------------------------------------- */
 
     .billing-notice {
       background: rgba(94, 234, 212, 0.05);
@@ -188,6 +187,7 @@
       </div>
       <nav class="nav">
         <a href="#courses">Courses</a>
+        <a href="#faq">FAQ</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -258,6 +258,61 @@
               
               <div id="paypal-container-pro" style="display: none;"></div>
             </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews" class="section alt">
+      <div class="container">
+        <h2 class="section-title">What Our Students Say</h2>
+        <div class="pricing-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+          
+          <div class="course-card" style="text-align: left; padding: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+              <div style="width: 40px; height: 40px; border-radius: 50%; background: #5eead4; color: #0f1724; display: flex; align-items: center; justify-content: center; font-weight: bold;">M</div>
+              <div>
+                <div style="font-weight: bold; color: white;">Mark S.</div>
+                <div style="font-size: 0.8rem; color: #5eead4;">Digital Basics</div>
+              </div>
+            </div>
+            <p style="font-size: 0.9rem; color: #9aa4b2; font-style: italic;">"The PDF guides are incredibly detailed. I was struggling with basic HTML/CSS concepts, but the structure here made it click. Delivered instantly after payment."</p>
+          </div>
+
+          <div class="course-card" style="text-align: left; padding: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+              <div style="width: 40px; height: 40px; border-radius: 50%; background: #334155; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">A</div>
+              <div>
+                <div style="font-weight: bold; color: white;">Anna K.</div>
+                <div style="font-size: 0.8rem; color: #5eead4;">Full Stack Developer</div>
+              </div>
+            </div>
+            <p style="font-size: 0.9rem; color: #9aa4b2; font-style: italic;">"Saved me months of searching for the right tutorials. The templates included in the pro version are worth the price alone. Support answered my email in 2 hours."</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section">
+      <div class="container">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div style="max-width: 800px; margin: 0 auto; text-align: left;">
+          
+          <div style="background: #0b1624; border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; margin-bottom: 15px;">
+            <h4 style="color: white; margin-top: 0; margin-bottom: 10px;">How do I get access after payment?</h4>
+            <p style="color: #9aa4b2; font-size: 0.9rem; margin: 0;">Access is instant. Once your PayPal transaction is approved, you will be automatically redirected to the secure download page. You will also receive an email with backup links.</p>
+          </div>
+
+          <div style="background: #0b1624; border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; margin-bottom: 15px;">
+            <h4 style="color: white; margin-top: 0; margin-bottom: 10px;">Are these video courses or text guides?</h4>
+            <p style="color: #9aa4b2; font-size: 0.9rem; margin: 0;">Our materials are structured as highly concentrated, downloadable PDF study guides and text resources. This allows you to learn at your own pace and easily search for specific code snippets.</p>
+          </div>
+
+          <div style="background: #0b1624; border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; margin-bottom: 0;">
+            <h4 style="color: white; margin-top: 0; margin-bottom: 10px;">What if I have a problem with my order?</h4>
+            <p style="color: #9aa4b2; font-size: 0.9rem; margin: 0;">We are here to help. If you experience any technical issues or feel the product wasn't what you expected, email us directly at <span style="color: #5eead4;">support@kono-digital.com</span> before opening a dispute. We review refund requests case-by-case.</p>
           </div>
 
         </div>
