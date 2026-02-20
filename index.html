@@ -9,7 +9,12 @@
   <link rel="stylesheet" href="styles.css">
   
   <style>
-    /* ПЛАШКА ПРОМОКОДА */
+    /* --- ИНТЕРАКТИВНАЯ ПЛАШКА ПРОМОКОДА --- */
+    .promo-wrapper {
+      position: relative;
+      z-index: 1000;
+    }
+    
     .promo-banner {
       background: linear-gradient(90deg, #1e293b, #0f172a);
       color: #ffffff;
@@ -18,12 +23,16 @@
       font-size: 0.9rem;
       font-weight: 600;
       border-bottom: 2px solid #5eead4;
-      position: relative;
-      z-index: 1000;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .promo-banner:hover {
+      background: linear-gradient(90deg, #2a3a54, #152238);
     }
 
     .promo-badge {
@@ -34,6 +43,26 @@
       font-weight: 800;
       text-transform: uppercase;
       font-size: 0.75rem;
+    }
+
+    /* Выпадающая панель с деталями промокода */
+    .promo-dropdown {
+      display: none;
+      background: #1e293b;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid #5eead4;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .promo-dropdown.active {
+      display: block;
+      animation: slideDown 0.2s ease-out;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .promo-code {
@@ -168,9 +197,20 @@
 </head>
 <body>
 
-  <div class="promo-banner">
-    <span class="promo-badge">Limited Offer</span>
-    <span>Get 8% OFF your first course! Use code: <span class="promo-code">KONO230</span></span>
+  <div class="promo-wrapper">
+    <div class="promo-banner" onclick="document.getElementById('promoDropdown').classList.toggle('active')">
+      <span class="promo-badge">Limited Offer</span>
+      <span>Get 8% OFF your first course! <span style="opacity: 0.7; font-size: 0.8rem; text-decoration: underline; margin-left: 5px;">Click for details ▾</span></span>
+    </div>
+    
+    <div class="promo-dropdown" id="promoDropdown">
+      <p style="margin-top: 0; color: #9aa4b2; font-size: 0.95rem;">This promo code is valid <strong>strictly for your first purchase</strong>. It cannot be combined with other offers.</p>
+      
+      <div style="background: #0b1624; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); display: inline-flex; align-items: center; gap: 15px;">
+        <span class="promo-code" style="font-size: 1.3rem; letter-spacing: 1px;">KONO230</span>
+        <button id="copyPromoBtn" class="btn btn-primary" style="height: 38px; padding: 0 20px; width: auto; font-size: 0.9rem;" onclick="copyPromo()">Copy Code</button>
+      </div>
+    </div>
   </div>
 
   <header class="site-header">
@@ -375,6 +415,20 @@
   <script src="script.js"></script>
   
   <script>
+    // Скрипт для копирования промокода
+    function copyPromo() {
+      navigator.clipboard.writeText("KONO230").then(function() {
+        var btn = document.getElementById("copyPromoBtn");
+        btn.innerText = "Copied! ✔";
+        btn.style.background = "#ffffff";
+        
+        setTimeout(function() {
+          btn.innerText = "Copy Code";
+          btn.style.background = ""; // Возвращаем родной цвет класса .btn-primary
+        }, 2000);
+      });
+    }
+
     // Закрытие модалок (Terms / Privacy) при клике вне их области
     window.onclick = function(event) {
       if (event.target.classList.contains('modal')) {
