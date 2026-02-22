@@ -52,7 +52,7 @@
       border: 1px solid rgba(255,255,255,0.06); 
       
       display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
       gap: 15px; 
       align-items: end; 
       
@@ -96,14 +96,18 @@
     .table-container { overflow-x: auto; background: var(--card); border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); }
     table { width: 100%; border-collapse: collapse; }
     th { text-align: left; padding: 18px; color: var(--muted); border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.8rem; text-transform: uppercase; white-space: nowrap; }
-    td { padding: 18px; border-bottom: 1px solid rgba(255,255,255,0.03); color: var(--white); white-space: nowrap; }
+    td { padding: 18px; border-bottom: 1px solid rgba(255,255,255,0.03); color: var(--white); white-space: nowrap; vertical-align: middle; }
     
     .action-buttons { display: flex; gap: 12px; opacity: 0; transition: opacity 0.2s; justify-content: flex-end; }
     tr:hover .action-buttons { opacity: 1; }
     .btn-icon { background: transparent; border: none; cursor: pointer; font-size: 1.2rem; transition: transform 0.2s; }
     .btn-edit:hover { transform: scale(1.3); } .btn-delete:hover { transform: scale(1.3); filter: drop-shadow(0 0 5px red); }
 
-    .badge-paid { background: rgba(94, 234, 212, 0.1); color: var(--accent); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+    .badge-paid { background: rgba(94, 234, 212, 0.1); color: var(--accent); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; text-align: center; min-width: 60px;}
+    .badge-refunded { background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; text-align: center; min-width: 60px;}
+    
+    .promo-tag { font-size: 0.7rem; color: var(--accent); background: rgba(94, 234, 212, 0.1); padding: 2px 6px; border-radius: 4px; margin-top: 4px; display: inline-block; font-weight: 600; letter-spacing: 0.5px;}
+
     .loader-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 36, 0.8); z-index: 2000; display: none; justify-content: center; align-items: center; }
     .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -129,8 +133,8 @@
     </header>
 
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-number" id="totalRevenue">€0</div></div>
-      <div class="stat-card"><div class="stat-label">Sales</div><div class="stat-number" id="totalSales">0</div></div>
+      <div class="stat-card"><div class="stat-label">Net Revenue</div><div class="stat-number" id="totalRevenue">€0</div></div>
+      <div class="stat-card"><div class="stat-label">Total Sales</div><div class="stat-number" id="totalSales">0</div></div>
     </div>
 
     <div class="add-section-wrapper">
@@ -147,11 +151,23 @@
         <div>
           <label>Product</label>
           <select id="productInput">
-            <option value="Digital Basics">Digital Basics (€250)</option>
-            <option value="Full Stack Dev">Full Stack Dev (€300)</option>
+            <option value="Digital Basics">Digital Basics</option>
+            <option value="Full Stack Dev">Full Stack Dev</option>
           </select>
         </div>
+        
+        <div><label>Promo Code</label><input type="text" id="promoInput" placeholder="Optional"></div>
+        
         <div><label>Price</label><input type="number" id="priceInput" value="250"></div>
+        
+        <div>
+          <label>Status</label>
+          <select id="statusInput">
+            <option value="Paid">Paid</option>
+            <option value="Refunded">Refunded</option>
+          </select>
+        </div>
+
         <div> 
            <label style="visibility: hidden;">Action</label> 
            <button id="submitBtn" class="btn-primary" onclick="handleFormSubmit()">+ Sync</button>
@@ -179,7 +195,6 @@
   </div>
 
   <script>
-    // ТВОЙ НОВЫЙ РАБОЧИЙ BIN ID
     const BIN_ID = "69977faeae596e708f384504"; 
     const API_KEY = "$2a$10$S3z8IltwDwTfbcs0rgp6leyEsgIbfjXK4t8.PS1Eer1GxxuQGAtfK";
     const PASSWORD = "admin123$"; 
@@ -246,12 +261,14 @@
       const email = document.getElementById('emailInput').value;
       const txnId = document.getElementById('txnInput').value; 
       const price = parseFloat(document.getElementById('priceInput').value);
+      const promo = document.getElementById('promoInput').value.trim();
+      const status = document.getElementById('statusInput').value;
       
       const dateVal = document.getElementById('datePart').value;
       const timeVal = document.getElementById('timePart').value;
       
       if (!email || !price || !dateVal || !timeVal) {
-          alert("Please fill all fields");
+          alert("Please fill all required fields");
           return;
       }
 
@@ -267,7 +284,9 @@
           email: email, 
           txnId: txnId, 
           product: document.getElementById('productInput').value, 
-          price: price 
+          price: price,
+          promo: promo,
+          status: status
       };
 
       const backupData = [...salesData];
@@ -299,6 +318,8 @@
         document.getElementById('nameInput').value = "";
         document.getElementById('emailInput').value = ""; 
         document.getElementById('txnInput').value = ""; 
+        document.getElementById('promoInput').value = ""; 
+        document.getElementById('statusInput').value = "Paid";
         document.getElementById('submitBtn').innerText = "+ Sync"; 
         setNow(); 
         renderTable();
@@ -312,13 +333,22 @@
     function renderTable() {
       const tbody = document.getElementById('tableBody');
       tbody.innerHTML = "";
-      let total = 0;
+      let totalRevenue = 0;
       
       salesData.sort((a,b) => b.id - a.id).forEach(sale => {
-        total += sale.price;
+        // Логика расчета чистой прибыли (считаем только Paid)
+        const currentStatus = sale.status || 'Paid';
+        if (currentStatus === 'Paid') {
+            totalRevenue += sale.price;
+        }
+
         const displayDate = sale.date ? sale.date : "Old Record"; 
         const displayName = sale.name ? `<strong style="color:white;">${sale.name}</strong>` : `<span style="color:#475569">-</span>`;
         const displayTxn = sale.txnId ? `<span style="font-family:monospace; color:#94a3b8; font-size:0.85rem;">${sale.txnId}</span>` : `<span style="color:#475569">None</span>`;
+        
+        const promoTag = sale.promo ? `<br><span class="promo-tag">${sale.promo}</span>` : '';
+        const statusBadge = currentStatus === 'Paid' ? `<span class="badge-paid">Paid</span>` : `<span class="badge-refunded">Refunded</span>`;
+        const priceStyle = currentStatus === 'Refunded' ? `text-decoration: line-through; color: var(--muted);` : `font-weight:bold; color:var(--accent);`;
 
         tbody.innerHTML += `
           <tr>
@@ -327,8 +357,8 @@
             <td>${sale.email}</td>
             <td>${displayTxn}</td>
             <td>${sale.product}</td>
-            <td style="font-weight:bold; color:var(--accent);">€${sale.price}</td>
-            <td><span class="badge-paid">Paid</span></td>
+            <td style="${priceStyle}">€${sale.price}${promoTag}</td>
+            <td>${statusBadge}</td>
             <td>
               <div class="action-buttons">
                 <button class="btn-icon btn-edit" onclick="editSale(${sale.id})">✏️</button>
@@ -337,7 +367,7 @@
             </td>
           </tr>`;
       });
-      document.getElementById('totalRevenue').innerText = `€${total}`;
+      document.getElementById('totalRevenue').innerText = `€${totalRevenue}`;
       document.getElementById('totalSales').innerText = salesData.length;
     }
 
@@ -361,6 +391,8 @@
       document.getElementById('txnInput').value = item.txnId || ""; 
       document.getElementById('productInput').value = item.product;
       document.getElementById('priceInput').value = item.price;
+      document.getElementById('promoInput').value = item.promo || "";
+      document.getElementById('statusInput').value = item.status || "Paid";
       
       editingId = id; 
       document.getElementById('submitBtn').innerText = "💾 Save"; 
@@ -371,7 +403,7 @@
     }
 
     async function deleteSale(id) {
-      if(!confirm("Delete?")) return;
+      if(!confirm("Delete this record permanently?")) return;
       showLoader(true);
       
       const backupData = [...salesData];
@@ -395,6 +427,8 @@
             document.getElementById('nameInput').value = "";
             document.getElementById('emailInput').value = "";
             document.getElementById('txnInput').value = "";
+            document.getElementById('promoInput').value = "";
+            document.getElementById('statusInput').value = "Paid";
             document.getElementById('addForm').classList.remove('locked');
             setNow();
         }
