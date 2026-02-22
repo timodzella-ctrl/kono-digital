@@ -1,15 +1,16 @@
-# Kono Digital — Static Landing
+Kono Digital — Official Course Infrastructure
+This repository contains the core delivery infrastructure and automated internal systems for Kono Digital educational products.
 
-Файлы:
-- `index.html` — главная страница
-- `styles.css` — стили
-- `script.js` — минимальная интерактивность
+System Details
+Author & Copyright Owner: Daniil Lebediev
 
-Как запустить локально:
+Primary Domain: kono-digital.com
 
-1. Откройте `index.html` в браузере (двойной клик).
-2. Или запустите простой сервер:
+Status: Production v1 (Active)
 
-```bash
-python3 -m http.server 8000
-# затем откройте http://localhost:8000
+All materials, including PDF manuals and technical guides for the "Digital Basics" and "Full Stack Developer" courses, are authored and owned exclusively by Daniil Lebediev.
+
+Usage
+This system is designed for automated digital product fulfillment. Unauthorized access or distribution is strictly prohibited.
+
+© 2026 Kono Digital. All rights reserved.
